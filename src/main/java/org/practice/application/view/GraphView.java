@@ -15,7 +15,7 @@ public class GraphView {
     private final List<Circle> vertices = new ArrayList<>();
     private final List<Text> vertexLabels = new ArrayList<>();
     private final List<Line> edges = new ArrayList<>();
-    private int vertexCounter = 1;
+
 
     public GraphView() {
         graphContainer = new StackPane(graphPane);
@@ -44,9 +44,6 @@ public class GraphView {
         return edges;
     }
 
-    public int getVertexCounter() {
-        return vertexCounter;
-    }
 
     public void incrementVertexCounter() {
         vertexCounter++;
@@ -59,13 +56,13 @@ public class GraphView {
         vertices.add(vertex);
         graphPane.getChildren().add(vertex);
 
-        Text label = new Text(String.valueOf(vertexCounter));
+        Text label = new Text(String.valueOf(vertices.size()));
         label.setX(x - 5);
         label.setY(y + 5);
         vertexLabels.add(label);
         graphPane.getChildren().add(label);
 
-        vertexCounter++;
+
     }
 
     public void deleteVertex(Circle vertex) {
