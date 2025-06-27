@@ -6,6 +6,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
+
+import java.io.File;
+import java.util.List;
 
 
 public class ToolbarView {
@@ -42,7 +46,11 @@ public class ToolbarView {
         toggleButton.setOnAction(e -> toggleEditMode());
 
         Button cleanButton = new Button("Clean");
+        cleanButton.setOnAction(e -> cleanSurface());
+
         Button loadGraphButton = new Button("Load graph");
+        loadGraphButton.setOnAction(e -> chooseFile());
+
         Button helpButton = new Button();
         helpButton.setGraphic(loadHelpIcon());
         helpButton.setOnAction(e -> showHelp());
@@ -142,7 +150,26 @@ public class ToolbarView {
         graphView.getVertices().stream().forEach(System.out::println);
 
         graphView.getVertexLabels().stream().forEach(System.out::println);
-        System.out.println("Help button clicked");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Instruction of program");
+        alert.setHeaderText("Choose mode: add vertex or remove them." +
+                "\nAdd vertex by clicking your mouse on surface." +
+                "\nFor removing choose right mode and click on yor vertex." +
+                "\nIn down side select two vertices between which the edge needs to be removed." +
+                "\nClick on RUN to see work of algorithm.");
+        alert.showAndWait();
+    }
+
+    private void chooseFile(){
+        FileChooser fileChooser = new FileChooser();
+        File selectedFile = fileChooser.showOpenDialog(null);
+    }
+
+    private void cleanSurface(){
+        List<Circle> allVertex = graphView.getVertices();
+        while (!allVertex.isEmpty()){
+            graphView.deleteVertex(allVertex.get(0));
+        }
     }
 
     private void setupMouseHandlers() {
