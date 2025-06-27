@@ -137,6 +137,11 @@ public class ToolbarView {
     }
 
     private void showHelp() {
+        graphView.getEdges().stream().forEach(System.out::println);
+
+        graphView.getVertices().stream().forEach(System.out::println);
+
+        graphView.getVertexLabels().stream().forEach(System.out::println);
         System.out.println("Help button clicked");
     }
 
@@ -157,6 +162,7 @@ public class ToolbarView {
                 }
             }
         });
+
     }
 
     private void toggleEditMode() {
@@ -171,11 +177,6 @@ public class ToolbarView {
             firstSelected = null;
         }
 
-        graphView.getVertices().forEach(vertex -> vertex.setOnMouseDragged(editMode ? e -> {
-            vertex.setCenterX(e.getX());
-            vertex.setCenterY(e.getY());
-            graphView.updateVertexLabel(vertex);
-        } : null));
     }
 
     private void handleVertexClick(Circle clickedVertex) {

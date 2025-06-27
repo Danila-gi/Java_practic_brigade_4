@@ -57,6 +57,8 @@ public class GraphView {
         Text label = new Text(String.valueOf(vertices.size()));
         label.setX(x - 5);
         label.setY(y + 5);
+        label.setMouseTransparent(true);
+        label.setPickOnBounds(false);
         vertexLabels.add(label);
         graphPane.getChildren().add(label);
 
