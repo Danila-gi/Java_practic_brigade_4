@@ -1,3 +1,5 @@
+package org.practic.application;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -30,6 +32,7 @@ public class Main extends Application {
     private Button toggleButton;
     private Button cleanButton;
     private Button helpButton;
+    private Button loadGraphButton;
     private ToggleButton addVertexButton;
     private ToggleButton deleteVertexButton;
     private int vertexCounter = 1;
@@ -71,10 +74,12 @@ public class Main extends Application {
 
     private HBox createToolbar() {
         // Кнопки режима редактирования
-        toggleButton = new Button("Run: ВКЛ");
+        toggleButton = new Button("Run: ON");
         toggleButton.setOnAction(e -> toggleEditMode());
 
         cleanButton = new Button("Clean");
+
+        loadGraphButton = new Button("Load graph");
 
         // Кнопка Help с иконкой
         helpButton = new Button();
@@ -84,12 +89,12 @@ public class Main extends Application {
         // Группа кнопок для добавления/удаления вершин
         ToggleGroup vertexToolsGroup = new ToggleGroup();
 
-        addVertexButton = new ToggleButton("Добавить вершину");
+        addVertexButton = new ToggleButton("Add vertex");
         addVertexButton.setToggleGroup(vertexToolsGroup);
         addVertexButton.setSelected(true);
         addVertexButton.setStyle("-fx-base: #a0e0a0;");
 
-        deleteVertexButton = new ToggleButton("Удалить вершину");
+        deleteVertexButton = new ToggleButton("Remove vertex");
         deleteVertexButton.setToggleGroup(vertexToolsGroup);
         deleteVertexButton.setStyle("-fx-base: #e0a0a0;");
 
@@ -99,7 +104,7 @@ public class Main extends Application {
         StackPane.setMargin(helpButton, new Insets(5, 5, 0, 0));
 
         // Основная панель инструментов слева
-        HBox leftToolbar = new HBox(10, toggleButton, cleanButton);
+        HBox leftToolbar = new HBox(10, toggleButton, cleanButton, loadGraphButton);
         leftToolbar.setAlignment(Pos.CENTER_LEFT);
 
         // Центральная панель с инструментами вершин
@@ -142,11 +147,11 @@ public class Main extends Application {
     private HBox createEdgeControls() {
         // Поля для ввода номеров вершин
         vertex1Field = new TextField();
-        vertex1Field.setPromptText("Вершина 1");
+        vertex1Field.setPromptText("Vertex 1");
         vertex1Field.setPrefWidth(80);
 
         vertex2Field = new TextField();
-        vertex2Field.setPromptText("Вершина 2");
+        vertex2Field.setPromptText("Vertex 2");
         vertex2Field.setPrefWidth(80);
 
         // Кнопки для управления рёбрами
@@ -160,9 +165,9 @@ public class Main extends Application {
 
         // Панель для элементов управления
         HBox controls = new HBox(10,
-                new Label("Управление рёбрами:"),
+                new Label("Edge Management:"),
                 vertex1Field,
-                new Label("—"),
+                new Label("--"),
                 vertex2Field,
                 addEdgeButton,
                 removeEdgeButton);
@@ -207,7 +212,7 @@ public class Main extends Application {
 
     private void toggleEditMode() {
         editMode = !editMode;
-        toggleButton.setText(editMode ? "Run: ВКЛ" : "Run: ВЫКЛ");
+        toggleButton.setText(editMode ? "Run: ON" : "Run: OFF");
 
         // Блокируем кнопки работы с вершинами в режиме просмотра
         addVertexButton.setDisable(!editMode);
@@ -326,6 +331,7 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        System.out.println("System encoding: " + System.getProperty("file.encoding"));
         launch(args);
     }
 }
