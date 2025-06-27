@@ -1,0 +1,47 @@
+==== 1 test ====
+graph.get(vertex.get(0)).add(vertex.get(1));
+graph.get(vertex.get(0)).add(vertex.get(2));
+
+graph.get(vertex.get(1)).add(vertex.get(0));
+graph.get(vertex.get(1)).add(vertex.get(3));
+
+graph.get(vertex.get(2)).add(vertex.get(0));
+graph.get(vertex.get(2)).add(vertex.get(3));
+
+graph.get(vertex.get(3)).add(vertex.get(1));
+graph.get(vertex.get(3)).add(vertex.get(2));
+graph.get(vertex.get(3)).add(vertex.get(4));
+
+graph.get(vertex.get(4)).add(vertex.get(3));
+graph.get(vertex.get(4)).add(vertex.get(5));
+graph.get(vertex.get(4)).add(vertex.get(6));
+
+graph.get(vertex.get(5)).add(vertex.get(4));
+graph.get(vertex.get(5)).add(vertex.get(6));
+
+graph.get(vertex.get(6)).add(vertex.get(4));
+graph.get(vertex.get(6)).add(vertex.get(5));
+==== =====
+
+==== 2 test ====
+graph.get(vertex.get(0)).add(vertex.get(1));
+graph.get(vertex.get(0)).add(vertex.get(2));
+
+graph.get(vertex.get(1)).add(vertex.get(0));
+graph.get(vertex.get(1)).add(vertex.get(3));
+
+graph.get(vertex.get(2)).add(vertex.get(0));
+graph.get(vertex.get(2)).add(vertex.get(3));
+
+graph.get(vertex.get(3)).add(vertex.get(1));
+graph.get(vertex.get(3)).add(vertex.get(2));
+graph.get(vertex.get(3)).add(vertex.get(4));
+
+graph.get(vertex.get(4)).add(vertex.get(3));
+graph.get(vertex.get(4)).add(vertex.get(5));
+graph.get(vertex.get(4)).add(vertex.get(6));
+
+graph.get(vertex.get(5)).add(vertex.get(4));
+
+graph.get(vertex.get(6)).add(vertex.get(4));
+==== ====
