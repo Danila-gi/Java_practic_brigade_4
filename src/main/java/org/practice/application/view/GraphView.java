@@ -16,7 +16,6 @@ public class GraphView {
     private final List<Text> vertexLabels = new ArrayList<>();
     private final List<Line> edges = new ArrayList<>();
 
-
     public GraphView() {
         graphContainer = new StackPane(graphPane);
         graphContainer.setPadding(new javafx.geometry.Insets(10));
@@ -45,9 +44,8 @@ public class GraphView {
     }
 
 
-    public void incrementVertexCounter() {
-        vertexCounter++;
-    }
+
+
 
     public void addVertex(double x, double y) {
         Circle vertex = new Circle(x, y, 15, javafx.scene.paint.Color.LIGHTBLUE);
