@@ -17,6 +17,8 @@ import java.util.Map;
 
 public class ToolbarView {
     private final Map<String, ButtonBase> buttons;
+    private TextField firstVertexField;
+    private TextField secondVertexField;
     private final HBox mainToolbar;
     private final HBox edgeToolbar;
 
@@ -82,8 +84,8 @@ public class ToolbarView {
     }
 
     private HBox createEdgeToolbar() {
-        TextField firstVertexField = new TextField("Vertex 1");
-        TextField secondVertexField = new TextField("Vertex 2");
+        firstVertexField = new TextField("Vertex 1");
+        secondVertexField = new TextField("Vertex 2");
 
         firstVertexField.setPrefWidth(80);
         secondVertexField.setPrefWidth(80);
@@ -137,5 +139,13 @@ public class ToolbarView {
 
     public HBox getEdgeToolbar() {
         return edgeToolbar;
+    }
+
+    public TextField getFirstVertexField() {
+        return firstVertexField;
+    }
+
+    public TextField getSecondVertexField() {
+        return secondVertexField;
     }
 }
