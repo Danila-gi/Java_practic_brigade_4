@@ -3,20 +3,17 @@ package org.practice.application.view;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GraphView {
     private final Pane graphPane;
     private final StackPane container;
-
-    private final List<Circle> vertices;
-    private final List<Text> vertexLabels;
-    private final List<Line> edges;
+    private final Map<Integer, VertexView> vertexViewMap;
+    private final List<EdgeView> edges;
 
     public GraphView() {
         graphPane = new Pane();
@@ -25,69 +22,80 @@ public class GraphView {
 
         container = new StackPane(graphPane);
         container.setPrefSize(600, 400);
-
-        vertices = new ArrayList<>();
-        vertexLabels = new ArrayList<>();
+        vertexViewMap = new HashMap<>();
         edges = new ArrayList<>();
     }
 
-    public void addVertex(double x, double y) {
-        Circle vertex = new Circle(x, y, 15, Color.LIGHTBLUE);
-        vertex.setStroke(Color.BLACK);
-        vertices.add(vertex);
-        graphPane.getChildren().add(vertex);
-
-        Text label = new Text(String.valueOf(vertices.size()));
-        label.setX(x - 5);
-        label.setY(y + 5);
-        label.setMouseTransparent(true);
-        label.setPickOnBounds(false);
-        vertexLabels.add(label);
-        graphPane.getChildren().add(label);
+    public void addVertex(int id, double x, double y, double radius, Color color) {
+        VertexView vertexView = new VertexView(id, x, y, radius, color);
+        vertexViewMap.put(id, vertexView);
+        graphPane.getChildren().addAll(vertexView.getCircle(), vertexView.getLabel());
     }
 
-    public void deleteVertex(Circle vertex) {
-        List<Line> edgesToRemove =  new ArrayList<>();
-        for (Line edge : edges) {
-            if (edge.getStartX() == vertex.getCenterX() && edge.getStartY() == vertex.getCenterY() ||
-                    edge.getEndX() == vertex.getCenterX() && edge.getEndY() == vertex.getCenterY()) {
+    public void deleteVertex(int id) {
+        VertexView removeVertexView = vertexViewMap.get(id);
+        if (removeVertexView != null) {
+            deleteAllEdgesByVertex(id);
+            graphPane.getChildren().removeAll(removeVertexView.getCircle(), removeVertexView.getLabel());
+            vertexViewMap.remove(id);
+        }
+    }
+
+    public void addEdge(int firstId, int secondId, double strokeWidth, Color color) {
+        VertexView from = vertexViewMap.get(firstId);
+        VertexView to = vertexViewMap.get(secondId);
+        EdgeView edgeView = new EdgeView(from, to, strokeWidth, color);
+
+        edges.add(edgeView);
+        graphPane.getChildren().addFirst(edgeView.getLine());
+    }
+
+    public void deleteEdge(int firstId, int secondId) {
+        VertexView from = vertexViewMap.get(firstId);
+        VertexView to = vertexViewMap.get(secondId);
+        EdgeView edgeToRemove = null;
+        for (EdgeView edge : edges) {
+            if (edge.getFrom() == from && edge.getTo() == to) {
+                edgeToRemove = edge;
+                break;
+            }
+        }
+        if (edgeToRemove != null) {
+            graphPane.getChildren().remove(edgeToRemove.getLine());
+            edges.remove(edgeToRemove);
+        }
+    }
+
+    public void deleteAllEdgesByVertex(int id) {
+        VertexView removeVertexView = vertexViewMap.get(id);
+        List<EdgeView> edgesToRemove = new ArrayList<>();
+        for (EdgeView edge : edges) {
+            if (edge.getFrom() == removeVertexView || edge.getTo() == removeVertexView) {
                 edgesToRemove.add(edge);
             }
         }
-        edges.removeAll(edgesToRemove);
-        graphPane.getChildren().removeAll(edgesToRemove);
-
-        int index = vertices.indexOf(vertex);
-        if (index >= 0 && index < vertexLabels.size()) {
-            graphPane.getChildren().remove(vertexLabels.get(index));
-            vertexLabels.remove(index);
-        }
-
-        graphPane.getChildren().remove(vertex);
-        vertices.remove(vertex);
-    }
-
-    public void updateVertexLabel(Circle vertex) {
-        int index = vertices.indexOf(vertex);
-        if (index >= 0 && index < vertexLabels.size()) {
-            Text label = vertexLabels.get(index);
-            label.setX(vertex.getCenterX() - 5);
-            label.setY(vertex.getCenterY() + 5);
+        for (EdgeView edge : edgesToRemove) {
+            graphPane.getChildren().remove(edge.getLine());
+            edges.remove(edge);
         }
     }
 
-    public void connectVertices(Circle v1, Circle v2) {
-        Line edge = new Line();
-        edge.setStroke(javafx.scene.paint.Color.BLACK);
-        edge.setStrokeWidth(2);
+    public void highlight(int id, Color color) {
+        VertexView vertex = vertexViewMap.get(id);
+        vertex.highlightCircle(color);
+    }
 
-        edge.startXProperty().bind(v1.centerXProperty());
-        edge.startYProperty().bind(v1.centerYProperty());
-        edge.endXProperty().bind(v2.centerXProperty());
-        edge.endYProperty().bind(v2.centerYProperty());
+    public void cleanSurface() {
+        graphPane.getChildren().clear();
+        vertexViewMap.clear();
+        edges.clear();
+    }
 
-        edges.add(edge);
-        graphPane.getChildren().add(edge);
+    public void showInfo() {
+        vertexViewMap.forEach((id, view) ->
+            System.out.println("id: " + id + ", vertexView: " + view)
+        );
+        edges.forEach(System.out::println);
     }
 
     public StackPane getContainer() {
@@ -96,17 +104,5 @@ public class GraphView {
 
     public Pane getGraphPane() {
         return graphPane;
-    }
-
-    public List<Circle> getVertices() {
-        return vertices;
-    }
-
-    public List<Text> getVertexLabels() {
-        return vertexLabels;
-    }
-
-    public List<Line> getEdges() {
-        return edges;
     }
 }

@@ -12,4 +12,9 @@ public class Vertex {
         this.isFirstDfs = false;
         this.isSecondDfs = false;
     }
+
+    public int getId() {
+        return id;
+    }
+
 }

@@ -1,12 +1,21 @@
 package org.practice.application.model;
 
 public class Edge {
-    private final Vertex source;
-    private final Vertex target;
+    private final Vertex from;
+    private final Vertex to;
     public boolean isBridge;
-    public Edge(Vertex source, Vertex target) {
-        this.source = source;
-        this.target = target;
+
+    public Edge(Vertex from, Vertex to) {
+        this.from = from;
+        this.to = to;
         this.isBridge = false;
+    }
+
+    public int getFromId() {
+        return this.from.getId();
+    }
+
+    public int getToId() {
+        return this.to.getId();
     }
 }
