@@ -3,11 +3,15 @@ package org.practice.application.view;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-
+import javafx.scene.Node;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javafx.scene.shape.Polygon;
+import javafx.scene.transform.Rotate;
+
 
 public class GraphView {
     private final Pane graphPane;
@@ -52,6 +56,8 @@ public class GraphView {
 
         edges.add(edgeView);
         graphPane.getChildren().add(0, edgeView.getLine());
+
+        // drawDirection(firstId, secondId); // Добавлял для теста
     }
 
     public void deleteEdge(int firstId, int secondId) {
@@ -69,6 +75,10 @@ public class GraphView {
             }
         }
         if (edgeToRemove != null) {
+            if (edgeToRemove.getLine().getUserData() != null) {
+                Node arrow = (Node) edgeToRemove.getLine().getUserData();
+                graphPane.getChildren().remove(arrow); // Удаляем стрелку с панели
+            }
             graphPane.getChildren().remove(edgeToRemove.getLine());
             edges.remove(edgeToRemove);
         }
@@ -83,6 +93,10 @@ public class GraphView {
             }
         }
         for (EdgeView edge : edgesToRemove) {
+            if (edge.getLine().getUserData() != null) {
+                Node arrow = (Node) edge.getLine().getUserData();
+                graphPane.getChildren().remove(arrow); // Удаляем стрелку с панели
+            }
             graphPane.getChildren().remove(edge.getLine());
             edges.remove(edge);
         }
@@ -112,5 +126,70 @@ public class GraphView {
 
     public Pane getGraphPane() {
         return graphPane;
+    }
+
+
+    public void drawDirection(int firstId, int secondId) {
+        VertexView from = vertexViewMap.get(firstId);
+        VertexView to = vertexViewMap.get(secondId);
+        if (from == null || to == null) {
+            return;
+        }
+
+        EdgeView edgeToDirection = null;
+        for (EdgeView edge : edges) {
+            if (edge.getFrom() == from && edge.getTo() == to) {
+                edgeToDirection = edge;
+                break;
+            }
+        }
+
+        if (edgeToDirection != null) {
+            addArrowToEdge(edgeToDirection, to);
+
+        }
+
+
+    }
+
+
+    private void addArrowToEdge(EdgeView edge, VertexView target) {
+
+        Polygon arrow = new Polygon();
+        arrow.getPoints().addAll(
+                0.0, 0.0,
+                10.0, -5.0,
+                10.0, 5.0
+        );
+        arrow.setFill(Color.BLACK);
+
+
+        double dx = edge.getLine().getEndX() - edge.getLine().getStartX();
+        double dy = edge.getLine().getEndY() - edge.getLine().getStartY();
+        double length = Math.sqrt(dx*dx + dy*dy);
+
+
+        dx /= length;
+        dy /= length;
+
+
+        double arrowX = target.getCircle().getCenterX() - dx * target.getCircle().getRadius();
+        double arrowY = target.getCircle().getCenterY() - dy * target.getCircle().getRadius();
+
+        arrow.setLayoutX(arrowX);
+        arrow.setLayoutY(arrowY);
+
+
+        double angle = Math.toDegrees(Math.atan2(dy, dx)) + 180;
+
+
+        Rotate rotation = new Rotate(angle, 0, 0);
+        arrow.getTransforms().add(rotation);
+
+
+        graphPane.getChildren().add(arrow);
+
+
+        edge.getLine().setUserData(arrow);
     }
 }
