@@ -6,17 +6,20 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 import org.practice.application.controller.GraphEditorController;
+import org.practice.application.model.Graph;
 
 public class MainWindow {
     private final Stage stage;
+    private final Graph graph;
     private final ToolbarView toolbarView;
     private final GraphView graphView;
     private final GraphEditorController controller;
 
     public MainWindow(Stage primaryStage) {
-        this.toolbarView = new ToolbarView();
+        this.graph = new Graph();
         this.graphView = new GraphView();
-        this.controller = new GraphEditorController(toolbarView, graphView);
+        this.toolbarView = new ToolbarView();
+        this.controller = new GraphEditorController(graph, graphView, toolbarView);
         this.stage = primaryStage;
 
         VBox root = new VBox(10, toolbarView.getToolbar(), graphView.getContainer(),toolbarView.getEdgeToolbar());

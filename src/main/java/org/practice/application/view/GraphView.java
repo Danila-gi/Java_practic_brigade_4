@@ -44,6 +44,10 @@ public class GraphView {
     public void addEdge(int firstId, int secondId, double strokeWidth, Color color) {
         VertexView from = vertexViewMap.get(firstId);
         VertexView to = vertexViewMap.get(secondId);
+        if (from == null || to == null) {
+            return;
+        }
+
         EdgeView edgeView = new EdgeView(from, to, strokeWidth, color);
 
         edges.add(edgeView);
@@ -53,6 +57,10 @@ public class GraphView {
     public void deleteEdge(int firstId, int secondId) {
         VertexView from = vertexViewMap.get(firstId);
         VertexView to = vertexViewMap.get(secondId);
+        if (from == null || to == null) {
+            return;
+        }
+
         EdgeView edgeToRemove = null;
         for (EdgeView edge : edges) {
             if (edge.getFrom() == from && edge.getTo() == to) {

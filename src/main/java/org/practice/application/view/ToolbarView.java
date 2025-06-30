@@ -93,8 +93,8 @@ public class ToolbarView {
         buttons.put("addEdge", createButton("+", "addEdgeButton"));
         buttons.get("addEdge").setStyle("-fx-font-weight: bold; -fx-base: #a0e0a0;");
 
-        buttons.put("removeEdge", createButton("-", "removeEdgeButton"));
-        buttons.get("removeEdge").setStyle("-fx-font-weight: bold; -fx-base: #e0a0a0;");
+        buttons.put("deleteEdge", createButton("-", "deleteEdgeButton"));
+        buttons.get("deleteEdge").setStyle("-fx-font-weight: bold; -fx-base: #e0a0a0;");
 
         HBox controls = new HBox(10,
                 new Label("Edge Management"),
@@ -102,7 +102,7 @@ public class ToolbarView {
                 new Label("--"),
                 secondVertexField,
                 buttons.get("addEdge"),
-                buttons.get("removeEdge")
+                buttons.get("deleteEdge")
         );
         controls.setAlignment(Pos.CENTER);
         controls.setPadding(new javafx.geometry.Insets(10));

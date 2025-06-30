@@ -6,22 +6,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
-import org.practice.application.model.Edge;
-import org.practice.application.model.Vertex;
+import org.practice.application.model.Graph;
 import org.practice.application.view.GraphView;
 import org.practice.application.view.ToolbarView;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class GraphEditorController {
+    private final Graph graph;
     private final GraphView graphView;
     private final ToolbarView toolbarView;
-    private final Map<Integer, Vertex> vertices;
-    private final List<Edge> edges;;
+
     private boolean isEditMode;
     private Integer firstSelectedVertexId = null;
 
@@ -31,11 +26,10 @@ public class GraphEditorController {
     private final Color colorEdge;
     private final double strokeWidth;
 
-    public GraphEditorController(ToolbarView toolbarView, GraphView graphView) {
-        this.toolbarView = toolbarView;
+    public GraphEditorController(Graph graph, GraphView graphView, ToolbarView toolbarView) {
+        this.graph = graph;
         this.graphView = graphView;
-        this.vertices = new HashMap<>();
-        this.edges = new ArrayList<>();
+        this.toolbarView = toolbarView;
         this.isEditMode = true;
         this.firstSelectedVertexId = null;
         this.colorVertex = Color.LIGHTBLUE;
@@ -52,6 +46,8 @@ public class GraphEditorController {
         toolbarView.getButton("help").setOnAction(event -> handleShowHelp());
         toolbarView.getButton("load").setOnAction(event -> handleLoadGraph());
         toolbarView.getButton("deleteVertex").setOnAction(event -> clearSelection());
+        toolbarView.getButton("addEdge").setOnAction(event -> handleAddEdge());
+        toolbarView.getButton("deleteEdge").setOnAction(event -> handleDeleteEdge());
     }
 
     private void toggleEditMode() {
@@ -59,6 +55,10 @@ public class GraphEditorController {
         toolbarView.getButton("run").setText(isEditMode ? "Run ON:" : "Run OFF");
         toolbarView.getButton("addVertex").setDisable(!isEditMode);
         toolbarView.getButton("deleteVertex").setDisable(!isEditMode);
+        toolbarView.getButton("addEdge").setDisable(!isEditMode);
+        toolbarView.getButton("deleteEdge").setDisable(!isEditMode);
+        toolbarView.getFirstVertexField().setDisable(!isEditMode);
+        toolbarView.getSecondVertexField().setDisable(!isEditMode);
 
         if (!isEditMode && firstSelectedVertexId != null) {
             graphView.highlight(firstSelectedVertexId, Color.LIGHTBLUE);
@@ -67,8 +67,7 @@ public class GraphEditorController {
     }
 
     private void handleCleanSurface() {
-        vertices.clear();
-        edges.clear();
+        graph.clear();
         graphView.cleanSurface();
     }
 
@@ -89,6 +88,34 @@ public class GraphEditorController {
         File selectedFile = fileChooser.showOpenDialog(null);
     }
 
+    private void handleAddEdge() {
+        String firstVertexText = toolbarView.getFirstVertexField().getText();
+        String secondVertexText= toolbarView.getSecondVertexField().getText();
+
+        try {
+            int firstVertexId = Integer.parseInt(firstVertexText);
+            int secondVertexId = Integer.parseInt(secondVertexText);
+            graph.addEdge(firstVertexId, secondVertexId);
+            graphView.addEdge(firstVertexId, secondVertexId, strokeWidth, colorEdge);
+        } catch (NumberFormatException exception) {
+            System.out.println("Enter correct digital Id vertexes");
+        }
+    }
+
+    private void handleDeleteEdge() {
+        String firstVertexText = toolbarView.getFirstVertexField().getText();
+        String secondVertexText= toolbarView.getSecondVertexField().getText();
+
+        try {
+            int firstVertexId = Integer.parseInt(firstVertexText);
+            int secondVertexId = Integer.parseInt(secondVertexText);
+            graph.deleteEdge(firstVertexId, secondVertexId);
+            graphView.deleteEdge(firstVertexId, secondVertexId);
+        } catch (NumberFormatException exception) {
+            System.out.println("Enter correct digital Id vertexes");
+        }
+    }
+
     private void setUpMouseHandlers() {
         graphView.getGraphPane().setOnMouseClicked(event -> {
             if (!isEditMode) {
@@ -100,16 +127,6 @@ public class GraphEditorController {
                 handleClickOnVertex(event);
             }
         });
-    }
-
-    private void deleteAllEdgesByVertex(int vertexId) {
-        List<Edge> edgesToRemove = new ArrayList<>();
-        for (Edge edge : edges) {
-            if (edge.getFromId() == vertexId || edge.getToId() == vertexId) {
-                edgesToRemove.add(edge);
-            }
-        }
-        edges.removeAll(edgesToRemove);
     }
 
     private boolean isInsideSurface(MouseEvent event) {
@@ -131,8 +148,8 @@ public class GraphEditorController {
             if (!isInsideSurface(event)) {
                 return;
             }
-            int key = vertices.isEmpty() ? 1 : vertices.size() + 1;
-            vertices.put(key, new Vertex(key));
+            int key = graph.getNextAvailableVertexId();
+            graph.addVertex(key);
             graphView.addVertex(key,event.getX(), event.getY(), radius, colorVertex);
         }
     }
@@ -146,26 +163,26 @@ public class GraphEditorController {
     private void handleClickOnVertex(MouseEvent event) {
         ToggleButton deleteVertexButton = (ToggleButton) toolbarView.getButton("deleteVertex");
         Circle clickedVertex = (Circle) event.getTarget();
-        int idVertex = (Integer) clickedVertex.getUserData();
+        int vertexId = (Integer) clickedVertex.getUserData();
         if (deleteVertexButton.isSelected()) {
-            vertices.remove(idVertex);
-            deleteAllEdgesByVertex(idVertex);
-            graphView.deleteVertex(idVertex);
+            graph.deleteVertex(vertexId);
+            graphView.deleteVertex(vertexId);
             return;
         }
 
         if (firstSelectedVertexId == null) {
-            firstSelectedVertexId = idVertex;
+            firstSelectedVertexId = vertexId;
             graphView.highlight(firstSelectedVertexId, Color.ORANGE);
             return;
         }
 
-        if (firstSelectedVertexId == idVertex) {
+        if (firstSelectedVertexId == vertexId) {
             clearSelection();
             return;
         }
-        graphView.addEdge(firstSelectedVertexId, idVertex, strokeWidth, colorEdge);
-        edges.add(new Edge(vertices.get(firstSelectedVertexId), vertices.get(idVertex)));
+        graphView.addEdge(firstSelectedVertexId, vertexId, strokeWidth, colorEdge);
+        graph.addEdge(firstSelectedVertexId, vertexId);
         clearSelection();
     }
+
 }
