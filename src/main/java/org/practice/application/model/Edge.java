@@ -18,4 +18,12 @@ public class Edge {
     public int getToId() {
         return this.to.getId();
     }
+
+    public Vertex getFirstVertex() {
+        return this.from;
+    }
+
+    public Vertex getSecondVertex() {
+        return this.to;
+    }
 }

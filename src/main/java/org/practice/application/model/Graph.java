@@ -1,5 +1,6 @@
 package org.practice.application.model;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -77,5 +78,31 @@ public class Graph {
         vertices.clear();
         edges.clear();
         nextAvailableId = 1;
+    }
+
+    public void execute(){
+        HashMap<Vertex, ArrayList<Vertex>> mapOfVertex = new HashMap<>();
+        ArrayList<Vertex> arrayOfVertex = new ArrayList<>();
+        for (Vertex vertex: this.vertices.values()) {
+            arrayOfVertex.add(vertex);
+            mapOfVertex.put(vertex, new ArrayList<>());
+        }
+        for (Edge edge: this.edges){
+            mapOfVertex.get(edge.getFirstVertex()).add(edge.getSecondVertex());
+            mapOfVertex.get(edge.getSecondVertex()).add(edge.getFirstVertex());
+        }
+
+        System.out.println(arrayOfVertex.toString());
+        System.out.println(mapOfVertex.toString());
+        Algorithm alg = new Algorithm(mapOfVertex, arrayOfVertex);
+        ArrayList<Vertex[]> result = alg.findBridges();
+        System.out.println("Result:");
+        for (Vertex[] pair: result){
+            System.out.println(pair[0] + "--" + pair[1]);
+        }
+
+        for (Vertex vertex: arrayOfVertex){
+            vertex.clearVertex();
+        }
     }
 }

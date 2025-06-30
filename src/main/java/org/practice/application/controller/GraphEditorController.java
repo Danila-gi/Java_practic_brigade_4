@@ -7,10 +7,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import org.practice.application.model.Graph;
+import org.practice.application.model.GraphFileReader;
+import org.practice.application.model.Vertex;
 import org.practice.application.view.GraphView;
 import org.practice.application.view.ToolbarView;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 public class GraphEditorController {
     private final Graph graph;
@@ -64,6 +69,9 @@ public class GraphEditorController {
             graphView.highlight(firstSelectedVertexId, Color.LIGHTBLUE);
             firstSelectedVertexId = null;
         }
+
+        if (!isEditMode)
+            graph.execute();
     }
 
     private void handleCleanSurface() {
@@ -86,6 +94,37 @@ public class GraphEditorController {
     private void handleLoadGraph() {
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showOpenDialog(null);
+
+        GraphFileReader reader = new GraphFileReader(selectedFile);
+
+        HashMap<Vertex, ArrayList<Vertex>> mapOfGraph = new HashMap<>();
+        mapOfGraph = reader.getGraph();
+        ArrayList<Vertex> vertex = new ArrayList<Vertex>();
+        vertex = reader.getVertex();
+
+        graph.clear();
+        graphView.cleanSurface();
+        for (Vertex ver: vertex){
+            Random rand = new Random();
+            int x = rand.nextInt(600);
+            x += (int)graphView.getContainer().getLayoutX();
+            int y = rand.nextInt(400);
+            y += (int)graphView.getContainer().getLayoutY();
+
+            int key = graph.getNextAvailableVertexId();
+            graph.addVertex(key);
+            graphView.addVertex(key, x, y, radius, colorVertex);
+        }
+
+        for (Vertex ver1: vertex) {
+            ArrayList<Vertex> arrayVertex = mapOfGraph.get(ver1);
+            for (Vertex ver2: arrayVertex) {
+                if (ver1.getId() > ver2.getId()) {
+                    graphView.addEdge(ver1.getId(), ver2.getId(), strokeWidth, colorEdge);
+                    graph.addEdge(ver1.getId(), ver2.getId());
+                }
+            }
+        }
     }
 
     private void handleAddEdge() {

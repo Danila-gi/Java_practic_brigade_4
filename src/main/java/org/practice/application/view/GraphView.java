@@ -51,7 +51,7 @@ public class GraphView {
         EdgeView edgeView = new EdgeView(from, to, strokeWidth, color);
 
         edges.add(edgeView);
-        graphPane.getChildren().addFirst(edgeView.getLine());
+        graphPane.getChildren().add(0, edgeView.getLine());
     }
 
     public void deleteEdge(int firstId, int secondId) {
