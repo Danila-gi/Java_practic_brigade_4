@@ -40,6 +40,10 @@ public class VertexView {
         return label;
     }
 
+    public void clear(){
+        circle.getStyleClass().add("vertex");
+    }
+
     @Override
     public String toString() {
         return "VertexView{"

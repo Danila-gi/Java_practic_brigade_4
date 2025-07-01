@@ -1,10 +1,14 @@
 package org.practice.application.controller;
 
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.stage.FileChooser;
 import org.practice.application.model.FileException;
 import org.practice.application.model.Graph;
@@ -79,8 +83,24 @@ public class GraphEditorController {
             firstSelectedVertexId = null;
         }
 
-        if (!isEditMode)
+        if (!isEditMode) {
             graph.execute();
+        }
+        else {
+            graph.clearAlg();
+            ArrayList<Node> arrayForDelete = new ArrayList<>();
+            for (Node node: graphView.getGraphPane().getChildren()){
+                if (node.getTypeSelector().equals("Polygon")){
+                    arrayForDelete.add(node);
+                }
+                if (node.getTypeSelector().equals("Line")){
+                    Line line = (Line) node;
+                    line.getStyleClass().clear();
+                    line.getStyleClass().add("edge");
+                }
+            }
+            graphView.getGraphPane().getChildren().removeAll(arrayForDelete);
+        }
     }
 
     private void handleCleanSurface() {

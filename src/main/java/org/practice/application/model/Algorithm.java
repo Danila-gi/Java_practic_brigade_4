@@ -38,6 +38,7 @@ public class Algorithm {
             protected Void call() throws Exception {
 
                 firstDFS();
+                System.out.println(graph.toString());
 
                 secondDFS();
 
@@ -61,8 +62,11 @@ public class Algorithm {
                 return null;
             }
         };
-
-
+        task.setOnSucceeded(event -> {
+            view.clearAfterAlgorithm();
+            for (Vertex ver: vertex)
+                ver.clearVertex();
+        });
         new Thread(task).start();
         return this.result;
     }
@@ -145,7 +149,10 @@ public class Algorithm {
                         continue OUTER_LOOP;
                     }
                 }
-                nextVertex = stack.pop();
+                stack.pop();
+                if (stack.empty())
+                    break;
+                nextVertex = stack.peek();
             }
             color++;
             nextVertex = findUnviewedVertexSecondDFS();
@@ -166,5 +173,12 @@ public class Algorithm {
                 return arrayAfterFirstDFS.get(i);
         }
         return null;
+    }
+
+    public void clear(){
+        graph.clear();
+        vertex.clear();
+        arrayAfterFirstDFS.clear();
+        result.clear();
     }
 }

@@ -102,7 +102,6 @@ public class Graph {
         alg.setGraph(mapOfVertex);
         alg.setVertex(arrayOfVertex);
         ArrayList<Vertex[]> result = alg.findBridges();
-        result.clear();
     }
 
     public void save(String filename){
@@ -143,5 +142,9 @@ public class Graph {
 
             System.out.println(ex.getMessage());
         }
+    }
+
+    public void clearAlg(){
+        alg.clear();
     }
 }

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
+import org.practice.application.model.Vertex;
 
 
 public class GraphView {
@@ -165,8 +166,6 @@ public class GraphView {
         if (edgeToDirection != null) {
             addArrowToEdge(edgeToDirection, from, numberChooseDirection);
         }
-
-
     }
 
 
@@ -230,6 +229,10 @@ public class GraphView {
         vertex.getCircle().setFill(getColorByNumber(color));
     }
 
+    public void clearAfterAlgorithm(){
+        for (VertexView ver: vertexViewMap.values())
+            ver.clear();
+    }
 
     public static Color getColorByNumber(int number) {
         return PREDEFINED_COLORS[number % PREDEFINED_COLORS.length];
