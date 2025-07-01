@@ -229,18 +229,5 @@ public class GraphEditorController {
         clearSelection();
     }
 
-    public void addDirection(int firstId, int secondId) {
-        graphView.drawDirection(firstId, secondId);
-    }
-
-    public void highlightBridge(int firstId, int secondId) {
-        graphView.drawBridges(firstId, secondId);
-    }
-
-    public void updateVertexColor(int id, int color) {
-        graphView.drawVertex(id, color);
-    }
-
-
 
 }

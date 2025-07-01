@@ -102,10 +102,7 @@ public class Graph {
         alg.setGraph(mapOfVertex);
         alg.setVertex(arrayOfVertex);
         ArrayList<Vertex[]> result = alg.findBridges();
-        System.out.println("Result:");
-        for (Vertex[] pair: result){
-            System.out.println(pair[0] + "--" + pair[1]);
-        }
+
 
         for (Vertex vertex: arrayOfVertex){
             vertex.clearVertex();

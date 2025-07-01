@@ -62,7 +62,7 @@ public class GraphView {
         edges.add(edgeView);
         graphPane.getChildren().add(0, edgeView.getLine());
 
-        // drawDirection(firstId, secondId); // Добавлял для теста
+
     }
 
     public void deleteEdge(int firstId, int secondId) {
@@ -133,7 +133,7 @@ public class GraphView {
         return graphPane;
     }
 
-    private EdgeView findEdge(int firstId, int secondId) {
+    private Pair<Integer,EdgeView> findEdge(int firstId, int secondId) {
         VertexView from = vertexViewMap.get(firstId);
         VertexView to = vertexViewMap.get(secondId);
         if (from == null || to == null) {
@@ -142,27 +142,35 @@ public class GraphView {
 
         EdgeView edgeToFind = null;
         for (EdgeView edge : edges) {
-            if (edge.getFrom() == from && edge.getTo() == to) {
+            if ((edge.getFrom() == from && edge.getTo() == to) || (edge.getFrom() == to && edge.getTo() == from)) {
                 edgeToFind = edge;
                 break;
             }
         }
-        return edgeToFind;
+        if (edgeToFind.getFrom() == from && edgeToFind.getTo() == to) {
+            return new Pair<>(1, edgeToFind);
+        }
+        if (edgeToFind.getFrom() == to && edgeToFind.getTo() == from) {
+            return new Pair<>(-1, edgeToFind);
+        }
+        return null;
     }
 
     public void drawDirection(int firstId, int secondId) {
         VertexView from = vertexViewMap.get(firstId);
-        EdgeView edgeToDirection = findEdge(firstId, secondId);
-        if (edgeToDirection != null) {
-            addArrowToEdge(edgeToDirection, from);
 
+        Pair<Integer,EdgeView> edgeViewPair = findEdge(firstId, secondId);
+        EdgeView edgeToDirection = edgeViewPair.getRight();
+        int numberChooseDirection = edgeViewPair.getLeft();
+        if (edgeToDirection != null) {
+            addArrowToEdge(edgeToDirection, from, numberChooseDirection);
         }
 
 
     }
 
 
-    private void addArrowToEdge(EdgeView edge, VertexView target) {
+    private void addArrowToEdge(EdgeView edge, VertexView target, int number) {
 
         Polygon arrow = new Polygon();
         arrow.getPoints().addAll(
@@ -182,14 +190,15 @@ public class GraphView {
         dy /= length;
 
 
-        double arrowX = target.getCircle().getCenterX() + dx * target.getCircle().getRadius();
-        double arrowY = target.getCircle().getCenterY() + dy * target.getCircle().getRadius();
+        double arrowX = target.getCircle().getCenterX() + number * dx * target.getCircle().getRadius();
+        double arrowY = target.getCircle().getCenterY() + number * dy * target.getCircle().getRadius();
 
         arrow.setLayoutX(arrowX);
         arrow.setLayoutY(arrowY);
 
 
-        double angle = Math.toDegrees(Math.atan2(dy, dx));
+
+        double angle = Math.toDegrees(Math.atan2(dy, dx)) + (180 * ((number == -1) ? 1 : 0));
 
 
         Rotate rotation = new Rotate(angle, 0, 0);
@@ -205,20 +214,20 @@ public class GraphView {
 
     public void drawBridges(int firstId, int secondId) {
 
-        EdgeView bridge = findEdge(firstId, secondId);
+        EdgeView bridge = findEdge(firstId, secondId).getRight();
         if (bridge != null) {
             if (bridge.getLine().getUserData() != null) {
                 Polygon arrow = (Polygon) bridge.getLine().getUserData();
                 arrow.setFill(Color.RED);
             }
-            bridge.getLine().setStroke(Color.RED);
+            bridge.getLine().getStyleClass().add("bridge");
         }
     }
 
 
     public void drawVertex(int id, int color) {
         VertexView vertex = vertexViewMap.get(id);
-        vertex.getCircle().setStroke(getColorByNumber(color));
+        vertex.getCircle().setFill(getColorByNumber(color));
     }
 
 

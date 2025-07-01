@@ -8,16 +8,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Stack;
 import javafx.application.Platform;
+import org.practice.application.view.GraphView;
+
 public class Algorithm {
     private HashMap<Vertex, ArrayList<Vertex>> graph;
     private ArrayList<Vertex> vertex;
     private ArrayList<Vertex[]> result;
-    private final GraphEditorController controller;
+    private final GraphView view;
 
 
-    public Algorithm(GraphEditorController controller){
+    public Algorithm(GraphView view){
         this.result = new ArrayList<Vertex[]>();
-        this.controller = controller;
+        this.view = view;
     }
 
     public void setGraph(HashMap<Vertex, ArrayList<Vertex>> graph) {
@@ -44,11 +46,15 @@ public class Algorithm {
                             result.add(new Vertex[]{ver1, ver2});
 
                             Platform.runLater(() -> {
-                                controller.highlightBridge(ver2.getId(), ver1.getId());
+                                view.drawBridges(ver2.getId(), ver1.getId());
                             });
 
                         }
                     }
+                }
+                System.out.println("Result:");
+                for (Vertex[] pair: result){
+                    System.out.println(pair[0] + "--" + pair[1]);
                 }
                 return null;
             }
@@ -74,7 +80,7 @@ public class Algorithm {
 
                         Vertex finalNextVertex = nextVertex;
                         Platform.runLater(() -> {
-                            controller.addDirection(finalNextVertex.getId(), neighbour.getId());
+                            view.drawDirection(finalNextVertex.getId(), neighbour.getId());
                         });
 
 
@@ -114,7 +120,7 @@ public class Algorithm {
             Vertex finalNextVertex = nextVertex;
             int finalColor = color;
             Platform.runLater(() -> {
-                controller.updateVertexColor(finalNextVertex.getId(), finalColor);
+                view.drawVertex(finalNextVertex.getId(), finalColor);
             });
 
             // Пауза для визуализации

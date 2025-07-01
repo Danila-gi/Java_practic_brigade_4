@@ -22,7 +22,7 @@ public class MainWindow {
         this.graphView = new GraphView();
         this.toolbarView = new ToolbarView();
         this.controller = new GraphEditorController(graph, graphView, toolbarView);
-        alg = new Algorithm(controller);
+        alg = new Algorithm(graphView);
         graph.setAlg(alg);
         this.stage = primaryStage;
 
@@ -31,6 +31,9 @@ public class MainWindow {
         root.setStyle("-fx-background-color: #f0f0f0;");
         VBox.setVgrow(graphView.getContainer(), Priority.ALWAYS);
         Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add(
+                getClass().getResource("/styles/graph-style.css").toExternalForm()
+        );
         stage.setTitle("Graph Editor with Vertex Tools");
         stage.setScene(scene);
         stage.show();

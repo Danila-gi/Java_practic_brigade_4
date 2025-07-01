@@ -12,10 +12,12 @@ public class VertexView {
     public VertexView(int id, double x, double y, double radius, Color color) {
         this.id = id;
         this.circle = new Circle(x, y, radius, color);
+        circle.getStyleClass().add("vertex");
         this.circle.setStroke(Color.BLACK);
         this.circle.setStrokeWidth(2);
         this.circle.setUserData(id);
         this.label = new Label(String.valueOf(id));
+        label.getStyleClass().add("vertex-label");
         this.label.layoutXProperty().bind(this.circle.centerXProperty().subtract(this.label.widthProperty().divide(2)));
         this.label.layoutYProperty().bind(this.circle.centerYProperty().subtract(this.label.heightProperty().divide(2)));
         this.label.setMouseTransparent(true);

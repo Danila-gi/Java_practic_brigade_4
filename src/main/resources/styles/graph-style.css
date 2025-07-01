@@ -1,0 +1,64 @@
+/* Основные стили для графа */
+.root {
+    -fx-background-color: #f5f5f5;
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Стиль для вершин (кругов) */
+.vertex {
+    -fx-fill: lightblue; /* Синий цвет по умолчанию */
+    -fx-stroke: #2a5885;
+    -fx-stroke-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0.5, 0, 1);
+}
+
+
+.vertex-label {
+    -fx-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+/* Стиль для рёбер (линий) */
+.edge {
+    -fx-stroke: #7f8c8d; /* Серый цвет по умолчанию */
+    -fx-stroke-width: 2;
+}
+
+
+.bridge {
+    -fx-stroke: #e74c3c; /* Красный цвет для мостов */
+    -fx-stroke-width: 3;
+    -fx-stroke-dash-array: 5 5; /* Пунктирная линия */
+}
+
+
+
+/* Стиль для кнопок */
+.button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 16;
+    -fx-background-radius: 4;
+}
+
+.button:hover {
+    -fx-background-color: #2980b9;
+}
+
+/* Стиль для панели инструментов */
+.tool-bar {
+    -fx-background-color: #ecf0f1;
+    -fx-padding: 10;
+    -fx-spacing: 10;
+}
+
+/* Стиль для информационной панели */
+.info-panel {
+    -fx-background-color: white;
+    -fx-padding: 15;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+}
