@@ -32,21 +32,130 @@
     -fx-stroke-dash-array: 5 5; /* Пунктирная линия */
 }
 
+.button,
+#clean-button,
+#load-button,
+#save-button,
+#help-button,
+.run-button,
+.cursor-button,
+.add-vertex-button,
+.delete-vertex-button,
+.add-edge-button,
+.delete-edge-button {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-weight: bold;
+}
 
-
-/* Стиль для кнопок */
-.button {
+.button,
+.run-button,
+#cursor-button,
+#clean-button,
+#load-button,
+#save-button,
+#help-button {
     -fx-background-color: #3498db;
     -fx-text-fill: white;
-    -fx-font-weight: bold;
     -fx-padding: 8 16;
     -fx-background-radius: 4;
 }
 
-.button:hover {
+.button:hover,
+.run-button:hover,
+#cursor-button:hover,
+#clean-button:hover,
+#load-button:hover,
+#save-button:hover,
+#help-button:hover {
     -fx-background-color: #2980b9;
 }
 
+.run-button:selected {
+    -fx-background-color: red;
+    /* Шрифт остаётся белым или чёрным, как было, не меняем */
+    -fx-text-fill: white;
+}
+
+/* Для кнопок добавления - зелёный фон, при нажатии темнее */
+.add-vertex-button {
+    -fx-background-color: #a0e0a0;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 13pt;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.add-vertex-button:selected,
+.add-edge-button:selected {
+    -fx-background-color: #7ba57a; /* Темнее зелёного */
+    -fx-text-fill: black;
+}
+
+/* Для кнопок удаления - красный фон, при нажатии темнее */
+.delete-vertex-button {
+    -fx-background-color: #e0a0a0;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 13pt;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.delete-vertex-button:selected,
+.delete-edge-button:selected {
+    -fx-background-color: #c67a7a;
+    -fx-text-fill: black;
+}
+
+/* Аналогично для кнопок рёбер */
+.add-edge-button {
+    -fx-background-color: #a0e0a0;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 13pt;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.delete-edge-button {
+    -fx-background-color: #e0a0a0;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 13pt;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* Эффект нажатия (во время клика) для добавления и удаления */
+.add-vertex-button:armed,
+.delete-vertex-button:armed,
+.add-edge-button:armed,
+.delete-edge-button:armed {
+    -fx-background-color: #616a6b;
+    -fx-text-fill: black;
+}
+
+/* Стили для TextField */
+.text-field {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-padding: 6 10;
+    -fx-background-radius: 4;
+    -fx-pref-height: 30;
+    -fx-border-color: #2980b9;
+    -fx-border-radius: 4;
+}
+
+.text-field:focused {
+    -fx-border-color: #3498db;
+    -fx-effect: dropshadow(three-pass-box, #3498db, 5, 0, 0, 0);
+}
+
+.edge-management-label {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-padding: 6 10 6 0;
+    -fx-text-fill: black;
+    -fx-alignment: center-left;
+}
 /* Стиль для панели инструментов */
 .tool-bar {
     -fx-background-color: #ecf0f1;

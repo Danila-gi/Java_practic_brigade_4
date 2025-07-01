@@ -70,7 +70,6 @@ public class GraphEditorController {
 
     private void toggleEditMode() {
         isEditMode = !isEditMode;
-        toolbarView.getButton("run").setText(isEditMode ? "Run ON:" : "Run OFF");
         toolbarView.getButton("addVertex").setDisable(!isEditMode);
         toolbarView.getButton("deleteVertex").setDisable(!isEditMode);
         toolbarView.getButton("addEdge").setDisable(!isEditMode);

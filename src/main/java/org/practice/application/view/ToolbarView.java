@@ -21,40 +21,33 @@ public class ToolbarView {
     private TextField secondVertexField;
     private final HBox mainToolbar;
     private final HBox edgeToolbar;
+    private final int iconSize;
 
     public ToolbarView() {
         this.buttons = new HashMap<>();
         this.mainToolbar = createToolbar();
         this.edgeToolbar = createEdgeToolbar();
+        this.iconSize = 20;
     }
 
     private HBox createToolbar() {
-        buttons.put("run", createButton("Run: ON", "runButton"));
-        buttons.put("clean", createButton("Clean", "cleanButton"));
-        buttons.put("load", createButton("Load graph", "loadButton"));
-        buttons.put("save", createButton("Save graph", "saveButton"));
-        buttons.put("help", createButton("", "helpButton"));
-        try {
-            ImageView helpIcon = loadIcon("/images/help_icon.png",20);
-            buttons.get("help").setGraphic(helpIcon);
-        } catch (IOException e) {
-            System.err.println("Icon load failed: " + e.getMessage());
-            buttons.get("help").setText("?");
-        }
+        buttons.put("run", createToggleButton("Run", "run-button"));
+        buttons.put("clean", createToggleButtonIcon("Clean", "clean-button"));
+        buttons.put("load", createToggleButtonIcon("Load", "load-button"));
+        buttons.put("save", createToggleButtonIcon ("Save","save-button"));
+        buttons.put("help", createToggleButtonIcon("Help", "help-button"));
+        buttons.put("addVertex", createToggleButton("Add vertex", "add-vertex-button"));
+        buttons.put("deleteVertex", createToggleButton("Remove vertex", "delete-vertex-button"));
+        buttons.put("cursor", createToggleButtonIcon("Cursor", "cursor-button"));
 
         ToggleGroup vertexToolsGroup = new ToggleGroup();
-
-        ToggleButton addVertexButton = new ToggleButton("Add vertex");
-        addVertexButton.setToggleGroup(vertexToolsGroup);
-        addVertexButton.setSelected(true);
-        addVertexButton.setStyle("-fx-base: #a0e0a0;");
-
-        ToggleButton deleteVertexButton = new ToggleButton("Remove Vertex");
-        deleteVertexButton.setToggleGroup(vertexToolsGroup);
-        deleteVertexButton.setStyle("-fx-base: #e0a0a0;");
-
-        buttons.put("addVertex", addVertexButton);
-        buttons.put("deleteVertex", deleteVertexButton);
+        String[] keys = {"addVertex", "deleteVertex", "cursor"};
+        for (String key : keys) {
+            ButtonBase button = buttons.get(key);
+            if (button instanceof ToggleButton) {
+                ((ToggleButton) button).setToggleGroup(vertexToolsGroup);
+            }
+        }
 
         StackPane helpContainer = new StackPane(buttons.get("help"));
         helpContainer.setAlignment(Pos.TOP_RIGHT);
@@ -68,6 +61,7 @@ public class ToolbarView {
         leftSection.setAlignment(Pos.CENTER_LEFT);
 
         HBox centerSection = new HBox(10,
+                buttons.get("cursor"),
                 buttons.get("addVertex"),
                 buttons.get("deleteVertex"));
         centerSection.setAlignment(Pos.CENTER);
@@ -86,20 +80,18 @@ public class ToolbarView {
     }
 
     private HBox createEdgeToolbar() {
-        firstVertexField = new TextField("Vertex 1");
-        secondVertexField = new TextField("Vertex 2");
+        firstVertexField = createTextField("Vertex 1", 80);
+        secondVertexField = createTextField("Vertex 2", 80);
 
-        firstVertexField.setPrefWidth(80);
-        secondVertexField.setPrefWidth(80);
+        buttons.put("addEdge", createToggleButton("+", "add-edge-button"));
+        buttons.put("deleteEdge", createToggleButton("-", "delete-edge-button"));
 
-        buttons.put("addEdge", createButton("+", "addEdgeButton"));
-        buttons.get("addEdge").setStyle("-fx-font-weight: bold; -fx-base: #a0e0a0;");
-
-        buttons.put("deleteEdge", createButton("-", "deleteEdgeButton"));
-        buttons.get("deleteEdge").setStyle("-fx-font-weight: bold; -fx-base: #e0a0a0;");
+        Label edgeManagement = new Label("Edge Management");
+        edgeManagement.setId("edge-management-label");
+        edgeManagement.getStyleClass().add("edge-management-label");
 
         HBox controls = new HBox(10,
-                new Label("Edge Management"),
+                edgeManagement,
                 firstVertexField,
                 new Label("--"),
                 secondVertexField,
@@ -125,10 +117,35 @@ public class ToolbarView {
         return imageView;
     }
 
-    private Button createButton(String text, String id) {
-        Button button = text.isEmpty() ? new Button() : new Button(text);
+    private ToggleButton createToggleButton(String text, String id) {
+        ToggleButton button = new ToggleButton(text);
         button.setId(id);
+        button.getStyleClass().add(id);
         return button;
+    }
+
+    private ToggleButton createToggleButtonIcon(String text, String id) {
+        ToggleButton button = new ToggleButton();
+        button.setId(id);
+        String name = text.toLowerCase() + "_icon.png";
+        String path = "/images/" + name;
+        try {
+            ImageView iconButton = loadIcon(path, iconSize);
+            button.setGraphic(iconButton);
+            button.setTooltip(new Tooltip(text));
+        } catch (IOException exception) {
+            System.err.println("Icon load failed: " + exception.getMessage());
+            button.setText(text);
+        }
+        return button;
+    }
+
+    private TextField createTextField(String text, int prefWidth) {
+        TextField textField = new TextField();
+        textField.getStyleClass().add("text-field");
+        textField.setPromptText(text);
+        textField.setPrefWidth(prefWidth);
+        return textField;
     }
 
     public ButtonBase getButton(String key) {
