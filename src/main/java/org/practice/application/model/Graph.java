@@ -10,11 +10,15 @@ public class Graph {
     private final Map<Integer, Vertex> vertices;
     private final List<Edge> edges;
     private int nextAvailableId;
-
+    private Algorithm alg;
     public Graph() {
         this.vertices = new HashMap<>();
         this.edges = new ArrayList<>();
         this.nextAvailableId = 1;
+    }
+
+    public void setAlg(Algorithm alg) {
+        this.alg = alg;
     }
 
     public void addVertex(int vertexId) {
@@ -94,7 +98,9 @@ public class Graph {
 
         System.out.println(arrayOfVertex.toString());
         System.out.println(mapOfVertex.toString());
-        Algorithm alg = new Algorithm(mapOfVertex, arrayOfVertex);
+
+        alg.setGraph(mapOfVertex);
+        alg.setVertex(arrayOfVertex);
         ArrayList<Vertex[]> result = alg.findBridges();
         System.out.println("Result:");
         for (Vertex[] pair: result){

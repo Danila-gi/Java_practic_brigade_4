@@ -1,40 +1,66 @@
 package org.practice.application.model;
 
+import javafx.concurrent.Task;
+import org.practice.application.controller.GraphEditorController;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
-
+import javafx.application.Platform;
 public class Algorithm {
     private HashMap<Vertex, ArrayList<Vertex>> graph;
     private ArrayList<Vertex> vertex;
     private ArrayList<Vertex[]> result;
+    private final GraphEditorController controller;
 
-    public Algorithm(HashMap<Vertex, ArrayList<Vertex>> graph, ArrayList<Vertex> vertex){
-        this.graph = graph;
+
+    public Algorithm(GraphEditorController controller){
         this.result = new ArrayList<Vertex[]>();
+        this.controller = controller;
+    }
+
+    public void setGraph(HashMap<Vertex, ArrayList<Vertex>> graph) {
+        this.graph = graph;
+    }
+
+    public void setVertex(ArrayList<Vertex> vertex) {
         this.vertex = vertex;
     }
 
     public ArrayList<Vertex[]> findBridges(){
-        this.firstDFS();
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                firstDFS();
+                return null;
+            }
+        };
 
         System.out.println("After first DFS:");
         System.out.println(graph.toString());
+        task.setOnSucceeded(e -> {
+            System.out.println("After first DFS:");
+            System.out.println(graph.toString());
+            secondDFS();
+            System.out.println("After second DFS:");
+            for (int i = 0; i < vertex.size(); i++) {
+                System.out.println(vertex.get(i).toString() + " - " + vertex.get(i).getColor());
+            }
 
-        this.secondDFS();
-        System.out.println("After second DFS:");
-        for (int i = 0; i < vertex.size(); i++){
-            System.out.println(vertex.get(i).toString() + " - " + vertex.get(i).getColor());
-        }
-
-        for (Vertex ver1: vertex){
-            for (Vertex ver2: graph.get(ver1)){
-                if (ver1.getColor() != ver2.getColor()){
-                    Vertex[] res = new Vertex[]{ver1, ver2};
-                    result.add(res);
+            for (Vertex ver1 : vertex) {
+                for (Vertex ver2 : graph.get(ver1)) {
+                    if (ver1.getColor() != ver2.getColor()) {
+                        Vertex[] res = new Vertex[]{ver1, ver2};
+                        result.add(res);
+                    }
                 }
             }
-        }
+            System.out.println("Result:");
+            for (Vertex[] pair: result){
+                System.out.println(pair[0] + "--" + pair[1]);
+            }
+        });
+        new Thread(task).start();
         return this.result;
     }
 
@@ -50,6 +76,22 @@ public class Algorithm {
                     if (!graph.get(nextVertex).get(i).getStateFisrtDFS()) {
                         Vertex neighbour = graph.get(nextVertex).get(i);
                         graph.get(nextVertex).remove(i);
+                        // Обновление UI
+                        Vertex finalNextVertex = nextVertex;
+                        Platform.runLater(() -> {
+                            controller.addDirection(finalNextVertex.getId(), neighbour.getId());
+                        });
+
+                        // Пауза между шагами
+                        try {
+                            Thread.sleep(1000); // Уменьшите для более быстрой анимации
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                            return;
+                        }
+
+
+
                         nextVertex = neighbour;
                         continue OUTER_LOOP;
                     }

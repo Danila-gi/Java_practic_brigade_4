@@ -145,7 +145,7 @@ public class GraphView {
         }
 
         if (edgeToDirection != null) {
-            addArrowToEdge(edgeToDirection, to);
+            addArrowToEdge(edgeToDirection, from);
 
         }
 
@@ -173,14 +173,14 @@ public class GraphView {
         dy /= length;
 
 
-        double arrowX = target.getCircle().getCenterX() - dx * target.getCircle().getRadius();
-        double arrowY = target.getCircle().getCenterY() - dy * target.getCircle().getRadius();
+        double arrowX = target.getCircle().getCenterX() + dx * target.getCircle().getRadius();
+        double arrowY = target.getCircle().getCenterY() + dy * target.getCircle().getRadius();
 
         arrow.setLayoutX(arrowX);
         arrow.setLayoutY(arrowY);
 
 
-        double angle = Math.toDegrees(Math.atan2(dy, dx)) + 180;
+        double angle = Math.toDegrees(Math.atan2(dy, dx));
 
 
         Rotate rotation = new Rotate(angle, 0, 0);

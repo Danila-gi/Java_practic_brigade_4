@@ -6,6 +6,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 import org.practice.application.controller.GraphEditorController;
+import org.practice.application.model.Algorithm;
 import org.practice.application.model.Graph;
 
 public class MainWindow {
@@ -14,12 +15,15 @@ public class MainWindow {
     private final ToolbarView toolbarView;
     private final GraphView graphView;
     private final GraphEditorController controller;
+    private final Algorithm alg;
 
     public MainWindow(Stage primaryStage) {
         this.graph = new Graph();
         this.graphView = new GraphView();
         this.toolbarView = new ToolbarView();
         this.controller = new GraphEditorController(graph, graphView, toolbarView);
+        alg = new Algorithm(controller);
+        graph.setAlg(alg);
         this.stage = primaryStage;
 
         VBox root = new VBox(10, toolbarView.getToolbar(), graphView.getContainer(),toolbarView.getEdgeToolbar());

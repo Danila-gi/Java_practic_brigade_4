@@ -224,4 +224,8 @@ public class GraphEditorController {
         clearSelection();
     }
 
+    public void addDirection(int firstId, int secondId) {
+        graphView.drawDirection(firstId, secondId);
+    }
+
 }
