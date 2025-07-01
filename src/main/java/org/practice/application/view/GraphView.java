@@ -19,6 +19,11 @@ public class GraphView {
     private final Map<Integer, VertexView> vertexViewMap;
     private final List<EdgeView> edges;
 
+    private static final Color[] PREDEFINED_COLORS = {
+            Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW,
+            Color.ORANGE, Color.PURPLE, Color.CYAN, Color.MAGENTA
+    };
+
     public GraphView() {
         graphPane = new Pane();
         graphPane.setPrefSize(600, 400);
@@ -128,22 +133,26 @@ public class GraphView {
         return graphPane;
     }
 
-
-    public void drawDirection(int firstId, int secondId) {
+    private EdgeView findEdge(int firstId, int secondId) {
         VertexView from = vertexViewMap.get(firstId);
         VertexView to = vertexViewMap.get(secondId);
         if (from == null || to == null) {
-            return;
+            return null;
         }
 
-        EdgeView edgeToDirection = null;
+        EdgeView edgeToFind = null;
         for (EdgeView edge : edges) {
             if (edge.getFrom() == from && edge.getTo() == to) {
-                edgeToDirection = edge;
+                edgeToFind = edge;
                 break;
             }
         }
+        return edgeToFind;
+    }
 
+    public void drawDirection(int firstId, int secondId) {
+        VertexView from = vertexViewMap.get(firstId);
+        EdgeView edgeToDirection = findEdge(firstId, secondId);
         if (edgeToDirection != null) {
             addArrowToEdge(edgeToDirection, from);
 
@@ -191,5 +200,29 @@ public class GraphView {
 
 
         edge.getLine().setUserData(arrow);
+    }
+
+
+    public void drawBridges(int firstId, int secondId) {
+
+        EdgeView bridge = findEdge(firstId, secondId);
+        if (bridge != null) {
+            if (bridge.getLine().getUserData() != null) {
+                Polygon arrow = (Polygon) bridge.getLine().getUserData();
+                arrow.setFill(Color.RED);
+            }
+            bridge.getLine().setStroke(Color.RED);
+        }
+    }
+
+
+    public void drawVertex(int id, int color) {
+        VertexView vertex = vertexViewMap.get(id);
+        vertex.getCircle().setStroke(getColorByNumber(color));
+    }
+
+
+    public static Color getColorByNumber(int number) {
+        return PREDEFINED_COLORS[number % PREDEFINED_COLORS.length];
     }
 }

@@ -31,6 +31,11 @@ public class GraphEditorController {
     private final Color colorEdge;
     private final double strokeWidth;
 
+    private static final Color[] PREDEFINED_COLORS = {
+            Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW,
+            Color.ORANGE, Color.PURPLE, Color.CYAN, Color.MAGENTA
+    };
+
     public GraphEditorController(Graph graph, GraphView graphView, ToolbarView toolbarView) {
         this.graph = graph;
         this.graphView = graphView;
@@ -227,5 +232,15 @@ public class GraphEditorController {
     public void addDirection(int firstId, int secondId) {
         graphView.drawDirection(firstId, secondId);
     }
+
+    public void highlightBridge(int firstId, int secondId) {
+        graphView.drawBridges(firstId, secondId);
+    }
+
+    public void updateVertexColor(int id, int color) {
+        graphView.drawVertex(id, color);
+    }
+
+
 
 }

@@ -4,6 +4,7 @@ import javafx.concurrent.Task;
 import org.practice.application.controller.GraphEditorController;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Stack;
 import javafx.application.Platform;
@@ -27,39 +28,33 @@ public class Algorithm {
         this.vertex = vertex;
     }
 
-    public ArrayList<Vertex[]> findBridges(){
+    public ArrayList<Vertex[]> findBridges() {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
+
                 firstDFS();
+
+                secondDFS();
+
+                for (Vertex ver1 : vertex) {
+                    for (Vertex ver2 : graph.get(ver1)) {
+                        if (ver1.getColor() != ver2.getColor()) {
+
+                            result.add(new Vertex[]{ver1, ver2});
+
+                            Platform.runLater(() -> {
+                                controller.highlightBridge(ver2.getId(), ver1.getId());
+                            });
+
+                        }
+                    }
+                }
                 return null;
             }
         };
 
-        System.out.println("After first DFS:");
-        System.out.println(graph.toString());
-        task.setOnSucceeded(e -> {
-            System.out.println("After first DFS:");
-            System.out.println(graph.toString());
-            secondDFS();
-            System.out.println("After second DFS:");
-            for (int i = 0; i < vertex.size(); i++) {
-                System.out.println(vertex.get(i).toString() + " - " + vertex.get(i).getColor());
-            }
 
-            for (Vertex ver1 : vertex) {
-                for (Vertex ver2 : graph.get(ver1)) {
-                    if (ver1.getColor() != ver2.getColor()) {
-                        Vertex[] res = new Vertex[]{ver1, ver2};
-                        result.add(res);
-                    }
-                }
-            }
-            System.out.println("Result:");
-            for (Vertex[] pair: result){
-                System.out.println(pair[0] + "--" + pair[1]);
-            }
-        });
         new Thread(task).start();
         return this.result;
     }
@@ -76,15 +71,15 @@ public class Algorithm {
                     if (!graph.get(nextVertex).get(i).getStateFisrtDFS()) {
                         Vertex neighbour = graph.get(nextVertex).get(i);
                         graph.get(nextVertex).remove(i);
-                        // Обновление UI
+
                         Vertex finalNextVertex = nextVertex;
                         Platform.runLater(() -> {
                             controller.addDirection(finalNextVertex.getId(), neighbour.getId());
                         });
 
-                        // Пауза между шагами
+
                         try {
-                            Thread.sleep(1000); // Уменьшите для более быстрой анимации
+                            Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             Thread.currentThread().interrupt();
                             return;
@@ -114,6 +109,24 @@ public class Algorithm {
             stack.push(nextVertex);
             nextVertex.secondDFS();
             nextVertex.setColor(color);
+
+
+            Vertex finalNextVertex = nextVertex;
+            int finalColor = color;
+            Platform.runLater(() -> {
+                controller.updateVertexColor(finalNextVertex.getId(), finalColor);
+            });
+
+            // Пауза для визуализации
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+
+
+
             while (!stack.empty()) {
                 for (int i = 0; i < graph.get(nextVertex).size(); i++) {
                     if (!graph.get(nextVertex).get(i).getStateSecondDFS()) {
