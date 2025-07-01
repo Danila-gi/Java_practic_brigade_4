@@ -6,6 +6,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
+import org.practice.application.model.FileException;
 import org.practice.application.model.Graph;
 import org.practice.application.model.GraphFileReader;
 import org.practice.application.model.Vertex;
@@ -13,6 +14,8 @@ import org.practice.application.view.GraphView;
 import org.practice.application.view.ToolbarView;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -55,6 +58,7 @@ public class GraphEditorController {
         toolbarView.getButton("clean").setOnAction(event -> handleCleanSurface());
         toolbarView.getButton("help").setOnAction(event -> handleShowHelp());
         toolbarView.getButton("load").setOnAction(event -> handleLoadGraph());
+        toolbarView.getButton("save").setOnAction(event -> handleSaveGraph());
         toolbarView.getButton("deleteVertex").setOnAction(event -> clearSelection());
         toolbarView.getButton("addEdge").setOnAction(event -> handleAddEdge());
         toolbarView.getButton("deleteEdge").setOnAction(event -> handleDeleteEdge());
@@ -84,6 +88,10 @@ public class GraphEditorController {
         graphView.cleanSurface();
     }
 
+    private void handleSaveGraph(){
+        graph.save("newGraph.txt");
+    }
+
     private void handleShowHelp() {
         graphView.showInfo();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -97,38 +105,47 @@ public class GraphEditorController {
     }
 
     private void handleLoadGraph() {
-        FileChooser fileChooser = new FileChooser();
-        File selectedFile = fileChooser.showOpenDialog(null);
+        try {
 
-        GraphFileReader reader = new GraphFileReader(selectedFile);
+            FileChooser fileChooser = new FileChooser();
+            File selectedFile = fileChooser.showOpenDialog(null);
 
-        HashMap<Vertex, ArrayList<Vertex>> mapOfGraph = new HashMap<>();
-        mapOfGraph = reader.getGraph();
-        ArrayList<Vertex> vertex = new ArrayList<Vertex>();
-        vertex = reader.getVertex();
+            GraphFileReader reader = new GraphFileReader(selectedFile);
 
-        graph.clear();
-        graphView.cleanSurface();
-        for (Vertex ver: vertex){
-            Random rand = new Random();
-            int x = rand.nextInt(600);
-            x += (int)graphView.getContainer().getLayoutX();
-            int y = rand.nextInt(400);
-            y += (int)graphView.getContainer().getLayoutY();
+            HashMap<Vertex, ArrayList<Vertex>> mapOfGraph;
+            mapOfGraph = reader.getGraph();
+            ArrayList<Vertex> vertex;
+            vertex = reader.getVertex();
 
-            int key = graph.getNextAvailableVertexId();
-            graph.addVertex(key);
-            graphView.addVertex(key, x, y, radius, colorVertex);
-        }
+            graph.clear();
+            graphView.cleanSurface();
+            for (Vertex ver : vertex) {
+                Random rand = new Random();
+                int x = rand.nextInt(600);
+                //x += (int)graphView.getContainer().getLayoutX();
+                int y = rand.nextInt(400);
+                //y += (int)graphView.getContainer().getLayoutY();
 
-        for (Vertex ver1: vertex) {
-            ArrayList<Vertex> arrayVertex = mapOfGraph.get(ver1);
-            for (Vertex ver2: arrayVertex) {
-                if (ver1.getId() > ver2.getId()) {
-                    graphView.addEdge(ver1.getId(), ver2.getId(), strokeWidth, colorEdge);
-                    graph.addEdge(ver1.getId(), ver2.getId());
+                int key = graph.getNextAvailableVertexId();
+                graph.addVertex(key);
+                graphView.addVertex(key, x, y, radius, colorVertex);
+            }
+
+            for (Vertex ver1 : vertex) {
+                ArrayList<Vertex> arrayVertex = mapOfGraph.get(ver1);
+                for (Vertex ver2 : arrayVertex) {
+                    if (ver1.getId() > ver2.getId()) {
+                        graphView.addEdge(ver1.getId(), ver2.getId(), strokeWidth, colorEdge);
+                        graph.addEdge(ver1.getId(), ver2.getId());
+                    }
                 }
             }
+        }
+        catch (FileException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("File Error");
+            alert.setHeaderText(e.getMessage());
+            alert.showAndWait();
         }
     }
 

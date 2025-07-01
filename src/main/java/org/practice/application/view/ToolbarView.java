@@ -32,6 +32,7 @@ public class ToolbarView {
         buttons.put("run", createButton("Run: ON", "runButton"));
         buttons.put("clean", createButton("Clean", "cleanButton"));
         buttons.put("load", createButton("Load graph", "loadButton"));
+        buttons.put("save", createButton("Save graph", "saveButton"));
         buttons.put("help", createButton("", "helpButton"));
         try {
             ImageView helpIcon = loadIcon("/images/help_icon.png",20);
@@ -62,7 +63,8 @@ public class ToolbarView {
         HBox leftSection = new HBox(10,
                 buttons.get("run"),
                 buttons.get("clean"),
-                buttons.get("load"));
+                buttons.get("load"),
+                buttons.get("save"));
         leftSection.setAlignment(Pos.CENTER_LEFT);
 
         HBox centerSection = new HBox(10,

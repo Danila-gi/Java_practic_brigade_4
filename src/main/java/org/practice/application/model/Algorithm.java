@@ -14,11 +14,13 @@ public class Algorithm {
     private HashMap<Vertex, ArrayList<Vertex>> graph;
     private ArrayList<Vertex> vertex;
     private ArrayList<Vertex[]> result;
+    private ArrayList<Vertex> arrayAfterFirstDFS;
     private final GraphView view;
 
 
     public Algorithm(GraphView view){
         this.result = new ArrayList<Vertex[]>();
+        this.arrayAfterFirstDFS = new ArrayList<Vertex>();
         this.view = view;
     }
 
@@ -71,6 +73,7 @@ public class Algorithm {
         OUTER_LOOP:
         while (nextVertex != null){
             stack.push(nextVertex);
+            arrayAfterFirstDFS.add(nextVertex);
             nextVertex.firstDFS();
             while (!stack.empty()) {
                 for (int i = 0; i < graph.get(nextVertex).size(); i++) {
@@ -158,9 +161,9 @@ public class Algorithm {
     }
 
     private Vertex findUnviewedVertexSecondDFS(){
-        for (int i = 0; i < vertex.size(); i++){
-            if (!vertex.get(i).getStateSecondDFS())
-                return vertex.get(i);
+        for (int i = 0; i < arrayAfterFirstDFS.size(); i++){
+            if (!arrayAfterFirstDFS.get(i).getStateSecondDFS())
+                return arrayAfterFirstDFS.get(i);
         }
         return null;
     }

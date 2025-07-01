@@ -1,10 +1,10 @@
 package org.practice.application.model;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class Graph {
     private final Map<Integer, Vertex> vertices;
@@ -102,10 +102,46 @@ public class Graph {
         alg.setGraph(mapOfVertex);
         alg.setVertex(arrayOfVertex);
         ArrayList<Vertex[]> result = alg.findBridges();
+        result.clear();
+    }
 
+    public void save(String filename){
+        try(FileWriter writer = new FileWriter(filename, false))
+        {
+            HashMap<Vertex, ArrayList<Vertex>> mapOfVertex = new HashMap<>();
+            ArrayList<Vertex> arrayOfVertex = new ArrayList<>();
+            for (Vertex vertex: this.vertices.values()) {
+                arrayOfVertex.add(vertex);
+                mapOfVertex.put(vertex, new ArrayList<>());
+            }
+            for (Edge edge: this.edges){
+                mapOfVertex.get(edge.getFirstVertex()).add(edge.getSecondVertex());
+                mapOfVertex.get(edge.getSecondVertex()).add(edge.getFirstVertex());
+            }
+            System.out.println(arrayOfVertex);
+            for (int i = 0; i < arrayOfVertex.size(); i++) {
+                String rowStr = "";
+                int[] rowInt = new int[arrayOfVertex.size()];
+                for (Vertex ver : mapOfVertex.get(arrayOfVertex.get(i))) {
+                    rowInt[arrayOfVertex.indexOf(ver)] = 1;
+                }
+                for (int j = 0; j < rowInt.length; j++){
+                    if (j == rowInt.length - 1){
+                        rowStr += rowInt[j];
+                        break;
+                    }
+                    rowStr += rowInt[j];
+                    rowStr += " ";
+                }
+                System.out.println(rowStr);
+                writer.write(rowStr);
+                writer.write('\n');
+            }
+            writer.flush();
+        }
+        catch(IOException ex){
 
-        for (Vertex vertex: arrayOfVertex){
-            vertex.clearVertex();
+            System.out.println(ex.getMessage());
         }
     }
 }
