@@ -18,7 +18,7 @@ import org.practice.application.view.ToolbarView;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GraphEditorController {
     private final Graph graph;
@@ -140,11 +140,8 @@ public class GraphEditorController {
             graph.clear();
             graphView.cleanSurface();
             for (Vertex ver : vertex) {
-                Random rand = new Random();
-                int x = rand.nextInt(600);
-                //x += (int)graphView.getContainer().getLayoutX();
-                int y = rand.nextInt(400);
-                //y += (int)graphView.getContainer().getLayoutY();
+                int x = ThreadLocalRandom.current().nextInt(15, 585);
+                int y = ThreadLocalRandom.current().nextInt(15, 385);
 
                 int key = graph.getNextAvailableVertexId();
                 graph.addVertex(key);

@@ -58,6 +58,7 @@ public class Graph {
             return;
         }
         edges.removeIf(edge -> edge.getToId() == firstVertexId && edge.getFromId() == secondVertexId);
+        edges.removeIf(edge -> edge.getToId() == secondVertexId && edge.getFromId() == firstVertexId);
     }
 
     public int getNextAvailableVertexId() {
