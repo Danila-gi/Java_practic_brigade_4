@@ -87,7 +87,12 @@ public class GraphEditorController {
             graph.execute();
         }
         else {
+            graph.stopAlg();
             graph.clearAlg();
+            graphView.clearAfterAlgorithm();
+            for (Vertex ver: graph.getArrayOfVertex()) {
+                ver.clearVertex();
+            }
             ArrayList<Node> arrayForDelete = new ArrayList<>();
             for (Node node: graphView.getGraphPane().getChildren()){
                 if (node.getTypeSelector().equals("Polygon")){

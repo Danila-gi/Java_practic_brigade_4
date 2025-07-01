@@ -147,4 +147,14 @@ public class Graph {
     public void clearAlg(){
         alg.clear();
     }
+
+    public ArrayList<Vertex> getArrayOfVertex(){
+        ArrayList<Vertex> array = new ArrayList<>();
+        array.addAll(this.vertices.values());
+        return array;
+    }
+
+    public void stopAlg(){
+        alg.stop();
+    }
 }

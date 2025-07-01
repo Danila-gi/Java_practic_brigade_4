@@ -16,6 +16,7 @@ public class Algorithm {
     private ArrayList<Vertex[]> result;
     private ArrayList<Vertex> arrayAfterFirstDFS;
     private final GraphView view;
+    private Thread taskOfAlg;
 
 
     public Algorithm(GraphView view){
@@ -67,7 +68,8 @@ public class Algorithm {
             for (Vertex ver: vertex)
                 ver.clearVertex();
         });
-        new Thread(task).start();
+        taskOfAlg = new Thread(task);
+        taskOfAlg.start();
         return this.result;
     }
 
@@ -180,5 +182,9 @@ public class Algorithm {
         vertex.clear();
         arrayAfterFirstDFS.clear();
         result.clear();
+    }
+
+    public void stop(){
+        taskOfAlg.interrupt();
     }
 }
