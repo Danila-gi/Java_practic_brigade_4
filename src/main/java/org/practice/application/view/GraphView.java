@@ -57,13 +57,17 @@ public class GraphView {
         if (from == null || to == null) {
             return;
         }
+        for (EdgeView edgeView : edges) {
+            if ((edgeView.getFrom() == from && edgeView.getTo() == to) ||
+                    (edgeView.getFrom() == to && edgeView.getTo() == from)) {
+                return;
+            }
+
+        }
 
         EdgeView edgeView = new EdgeView(from, to, strokeWidth, color);
-
         edges.add(edgeView);
         graphPane.getChildren().add(0, edgeView.getLine());
-
-
     }
 
     public void deleteEdge(int firstId, int secondId) {
@@ -75,7 +79,8 @@ public class GraphView {
 
         EdgeView edgeToRemove = null;
         for (EdgeView edge : edges) {
-            if (edge.getFrom() == from && edge.getTo() == to) {
+            if ((edge.getFrom() == from && edge.getTo() == to) ||
+                    (edge.getFrom() == to && edge.getTo() == from)) {
                 edgeToRemove = edge;
                 break;
             }

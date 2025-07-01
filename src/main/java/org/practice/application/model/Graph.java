@@ -46,6 +46,9 @@ public class Graph {
             System.out.println("first or second vertex doesn't exist");
             return;
         }
+        if (hasEdge(firstVertexId, secondVertexId)) {
+            return;
+        }
         edges.add(new Edge(vertices.get(firstVertexId), vertices.get(secondVertexId)));
     }
 
@@ -71,7 +74,8 @@ public class Graph {
         }
         Edge checkEdge = null;
         for (Edge edge : edges) {
-            if (edge.getFromId() == firstVertexId &&  edge.getToId() == secondVertexId) {
+            if ((edge.getFromId() == firstVertexId &&  edge.getToId() == secondVertexId)
+                || (edge.getFromId() == secondVertexId && edge.getToId() == firstVertexId)) {
                 checkEdge = edge;
             }
         }
