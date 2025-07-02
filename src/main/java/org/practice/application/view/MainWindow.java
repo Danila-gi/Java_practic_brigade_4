@@ -1,6 +1,7 @@
 package org.practice.application.view;
 
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -25,6 +26,10 @@ public class MainWindow {
         alg = new Algorithm(graphView);
         graph.setAlg(alg);
         this.stage = primaryStage;
+        Image icon = new Image(getClass().getResourceAsStream("/images/Bridge_1.png"));
+
+        // Установка иконки
+        primaryStage.getIcons().add(icon);
 
         VBox root = new VBox(10, toolbarView.getToolbar(), graphView.getContainer(),toolbarView.getEdgeToolbar());
         root.setPadding(new Insets(10));
