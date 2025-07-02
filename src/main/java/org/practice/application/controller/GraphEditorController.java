@@ -34,6 +34,8 @@ public class GraphEditorController {
     private final Color colorEdge;
     private final double strokeWidth;
 
+    private boolean isDragMode;
+
     private static final Color[] PREDEFINED_COLORS = {
             Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW,
             Color.ORANGE, Color.PURPLE, Color.CYAN, Color.MAGENTA
@@ -44,6 +46,7 @@ public class GraphEditorController {
         this.graphView = graphView;
         this.toolbarView = toolbarView;
         this.isEditMode = true;
+        this.isDragMode = false;
         this.firstSelectedVertexId = null;
         this.colorVertex = Color.LIGHTBLUE;
         this.radius = 15;
@@ -51,6 +54,7 @@ public class GraphEditorController {
         this.strokeWidth = 2;
         setUpToolbarActions();
         setUpMouseHandlers();
+        setupDragHandlers();
     }
 
     private void setUpToolbarActions() {
@@ -62,6 +66,19 @@ public class GraphEditorController {
         toolbarView.getButton("deleteVertex").setOnAction(event -> clearSelection());
         toolbarView.getButton("addEdge").setOnAction(event -> handleAddEdge());
         toolbarView.getButton("deleteEdge").setOnAction(event -> handleDeleteEdge());
+        toolbarView.getButton("cursor").setOnAction(event -> dragEditMode());
+    }
+
+    private void dragEditMode() {
+
+        isDragMode = !isDragMode;
+        toolbarView.getButton("addVertex").setDisable(isDragMode);
+        toolbarView.getButton("deleteVertex").setDisable(isDragMode);
+        toolbarView.getButton("addEdge").setDisable(isDragMode);
+        toolbarView.getButton("deleteEdge").setDisable(isDragMode);
+        toolbarView.getFirstVertexField().setDisable(isDragMode);
+        toolbarView.getSecondVertexField().setDisable(isDragMode);
+
     }
 
     private void toggleEditMode() {
@@ -262,6 +279,20 @@ public class GraphEditorController {
         graph.addEdge(firstSelectedVertexId, vertexId);
         clearSelection();
     }
+
+    private void setupDragHandlers() {
+        graphView.getGraphPane().setOnMouseDragged(event -> {
+            if (!isDragMode) return;
+            if (event.getTarget() instanceof Circle) {
+                Circle circle = (Circle) event.getTarget();
+
+                circle.setCenterX(event.getX());
+                circle.setCenterY(event.getY());
+
+            }
+        });
+    }
+
 
 
 }
