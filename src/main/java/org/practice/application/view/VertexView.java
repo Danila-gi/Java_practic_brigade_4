@@ -9,12 +9,10 @@ public class VertexView {
     private final Circle circle;
     private final Label label;
 
-    public VertexView(int id, double x, double y, double radius, Color color) {
+    public VertexView(int id, double x, double y, double radius) {
         this.id = id;
-        this.circle = new Circle(x, y, radius, color);
+        this.circle = new Circle(x, y, radius);
         circle.getStyleClass().add("vertex");
-        this.circle.setStroke(Color.BLACK);
-        this.circle.setStrokeWidth(2);
         this.circle.setUserData(id);
         this.label = new Label(String.valueOf(id));
         label.getStyleClass().add("vertex-label");
@@ -38,6 +36,19 @@ public class VertexView {
 
     public Label getLabel() {
         return label;
+    }
+
+    public void moveTo(double x, double y) {
+        circle.setCenterX(x);
+        circle.setCenterY(y);
+    }
+
+    public double getVertexPositionX() {
+        return circle.getCenterX();
+    }
+
+    public double getVertexPositionY() {
+        return circle.getCenterY();
     }
 
     public void clear(){

@@ -11,7 +11,6 @@ import java.util.Map;
 
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
-import org.practice.application.model.Vertex;
 
 
 public class GraphView {
@@ -36,8 +35,8 @@ public class GraphView {
         edges = new ArrayList<>();
     }
 
-    public void addVertex(int id, double x, double y, double radius, Color color) {
-        VertexView vertexView = new VertexView(id, x, y, radius, color);
+    public void addVertex(int id, double x, double y, double radius) {
+        VertexView vertexView = new VertexView(id, x, y, radius);
         vertexViewMap.put(id, vertexView);
         graphPane.getChildren().addAll(vertexView.getCircle(), vertexView.getLabel());
     }
@@ -51,7 +50,7 @@ public class GraphView {
         }
     }
 
-    public void addEdge(int firstId, int secondId, double strokeWidth, Color color) {
+    public void addEdge(int firstId, int secondId) {
         VertexView from = vertexViewMap.get(firstId);
         VertexView to = vertexViewMap.get(secondId);
         if (from == null || to == null) {
@@ -64,8 +63,7 @@ public class GraphView {
             }
 
         }
-
-        EdgeView edgeView = new EdgeView(from, to, strokeWidth, color);
+        EdgeView edgeView = new EdgeView(from, to);
         edges.add(edgeView);
         graphPane.getChildren().add(0, edgeView.getLine());
     }
@@ -129,6 +127,17 @@ public class GraphView {
             System.out.println("id: " + id + ", vertexView: " + view)
         );
         edges.forEach(System.out::println);
+    }
+    public void moveToVertexView(int vertexViewId, double x, double y) {
+        VertexView vertexView = vertexViewMap.get(vertexViewId);
+        if (vertexView != null) {
+            vertexView.moveTo(x, y);
+        }
+    }
+
+    public Pair<Double, Double> getVertexPosition(int vertexViewId) {
+        VertexView vertexView = vertexViewMap.get(vertexViewId);
+        return new Pair<>(vertexView.getVertexPositionX(), vertexView.getVertexPositionY());
     }
 
     public StackPane getContainer() {

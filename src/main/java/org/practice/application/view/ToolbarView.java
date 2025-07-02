@@ -148,6 +148,10 @@ public class ToolbarView {
         return textField;
     }
 
+    public Map<String, ButtonBase> getButtons() {
+        return buttons;
+    }
+
     public ButtonBase getButton(String key) {
         return buttons.get(key);
     }

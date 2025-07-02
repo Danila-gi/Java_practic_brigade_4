@@ -9,12 +9,10 @@ public class EdgeView {
     private final VertexView to;
     private final Line line;
 
-    public EdgeView(VertexView from, VertexView to, double strokeWidth, Color color) {
+    public EdgeView(VertexView from, VertexView to) {
         this.from = from;
         this.to = to;
         this.line = new Line();
-        this.line.setStroke(color);
-        this.line.setStrokeWidth(strokeWidth);
         line.getStyleClass().add("edge");
         this.line.startXProperty().bind(from.getCircle().centerXProperty());
         this.line.startYProperty().bind(from.getCircle().centerYProperty());

@@ -22,9 +22,9 @@ public class MainWindow {
         this.graph = new Graph();
         this.graphView = new GraphView();
         this.toolbarView = new ToolbarView();
-        this.controller = new GraphEditorController(graph, graphView, toolbarView);
         alg = new Algorithm(graphView);
         graph.setAlg(alg);
+        this.controller = new GraphEditorController(graph, graphView, toolbarView);
         this.stage = primaryStage;
         Image icon = new Image(getClass().getResourceAsStream("/images/Bridge_1.png"));
 
