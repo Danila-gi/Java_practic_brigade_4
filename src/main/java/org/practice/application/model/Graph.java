@@ -109,7 +109,7 @@ public class Graph {
         ArrayList<Vertex[]> result = alg.findBridges();
     }
 
-    public void save(String filename){
+    public void saveGraph(String filename){
         try(FileWriter writer = new FileWriter(filename, false))
         {
             HashMap<Vertex, ArrayList<Vertex>> mapOfVertex = new HashMap<>();
@@ -149,6 +149,21 @@ public class Graph {
         }
     }
 
+    public void saveResult(String filename) {
+        saveGraph(filename);
+        try (FileWriter writer = new FileWriter(filename, true)) {
+            getRusult();
+            ArrayList<Vertex[]> bridges = alg.getListBridges();
+            writer.write("Result:");
+            for (Vertex[] bridge : bridges) {
+                writer.write(bridge[0] + " -- " + bridge[1] + "\n");
+            }
+            alg.clear();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public void clearAlg(){
         alg.clear();
     }
@@ -178,6 +193,5 @@ public class Graph {
         alg.setGraph(mapOfVertex);
         alg.setVertex(arrayOfVertex);
         alg.getResultFast();
-
     }
 }

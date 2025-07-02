@@ -1,10 +1,8 @@
 package org.practice.application.model;
 
 import javafx.concurrent.Task;
-import org.practice.application.controller.GraphEditorController;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Stack;
 import javafx.application.Platform;
@@ -201,7 +199,6 @@ public class Algorithm {
             for (Vertex ver2 : graph.get(ver1)) {
                 if (ver1.getColor() != ver2.getColor()) {
                     result.add(new Vertex[]{ver1, ver2});
-
                     view.drawBridges(ver2.getId(), ver1.getId());
 
                 }
@@ -216,7 +213,9 @@ public class Algorithm {
 
         for (Vertex ver: vertex)
             ver.clearVertex();
+    }
 
-
+    public ArrayList<Vertex[]> getListBridges() {
+        return result;
     }
 }

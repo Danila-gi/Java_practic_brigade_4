@@ -1,5 +1,7 @@
 package org.practice.application.controller;
 
+import javafx.scene.Node;
+import javafx.scene.shape.Line;
 import org.practice.application.model.*;
 import org.practice.application.view.GraphView;
 
@@ -51,6 +53,22 @@ public class FileController {
     }
 
     public void saveGraph(String filename) throws FileException {
-        graph.save(filename);
+        graph.saveGraph(filename);
+    }
+
+    public void saveResult(String filename) throws FileException {
+        graph.saveResult(filename);
+        for (Vertex ver : graph.getArrayOfVertex()) {
+            ver.clearVertex();
+        }
+
+
+        for (Node node : graphView.getGraphPane().getChildren()) {
+            if ("Line".equals(node.getTypeSelector())) {
+                Line line = (Line) node;
+                line.getStyleClass().clear();
+                line.getStyleClass().add("edge");
+            }
+        }
     }
 }
