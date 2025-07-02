@@ -162,4 +162,22 @@ public class Graph {
     public void stopAlg(){
         alg.stop();
     }
+
+    public void getRusult() {
+        HashMap<Vertex, ArrayList<Vertex>> mapOfVertex = new HashMap<>();
+        ArrayList<Vertex> arrayOfVertex = new ArrayList<>();
+        for (Vertex vertex: this.vertices.values()) {
+            arrayOfVertex.add(vertex);
+            mapOfVertex.put(vertex, new ArrayList<>());
+        }
+        for (Edge edge: this.edges){
+            mapOfVertex.get(edge.getFirstVertex()).add(edge.getSecondVertex());
+            mapOfVertex.get(edge.getSecondVertex()).add(edge.getFirstVertex());
+        }
+
+        alg.setGraph(mapOfVertex);
+        alg.setVertex(arrayOfVertex);
+        alg.getResultFast();
+
+    }
 }

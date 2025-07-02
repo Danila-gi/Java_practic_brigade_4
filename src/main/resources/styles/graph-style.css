@@ -42,7 +42,8 @@
 .add-vertex-button,
 .delete-vertex-button,
 .add-edge-button,
-.delete-edge-button {
+.delete-edge-button,
+.result-button {
     -fx-font-size: 12pt;
     -fx-font-family: "Segoe UI", sans-serif;
     -fx-font-weight: bold;
@@ -50,6 +51,7 @@
 
 .button,
 .run-button,
+.result-button,
 #cursor-button,
 #clean-button,
 #load-button,
@@ -71,7 +73,8 @@
     -fx-background-color: #2980b9;
 }
 
-.run-button:selected {
+.run-button:selected,
+.result-button:selected {
     -fx-background-color: red;
     -fx-text-fill: black;
 }

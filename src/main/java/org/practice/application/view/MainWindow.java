@@ -35,7 +35,7 @@ public class MainWindow {
         root.setPadding(new Insets(10));
         root.setStyle("-fx-background-color: #f0f0f0;");
         VBox.setVgrow(graphView.getContainer(), Priority.ALWAYS);
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 900, 600);
         scene.getStylesheets().add(
                 getClass().getResource("/styles/graph-style.css").toExternalForm()
         );

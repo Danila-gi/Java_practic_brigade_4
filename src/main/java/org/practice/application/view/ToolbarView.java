@@ -39,6 +39,7 @@ public class ToolbarView {
         buttons.put("addVertex", createToggleButton("Add vertex", "add-vertex-button"));
         buttons.put("deleteVertex", createToggleButton("Remove vertex", "delete-vertex-button"));
         buttons.put("cursor", createToggleButtonIcon("Cursor", "cursor-button"));
+        buttons.put("result", createToggleButton("Get result", "result-button"));
 
         ToggleGroup vertexToolsGroup = new ToggleGroup();
         String[] keys = {"addVertex", "deleteVertex", "cursor"};
@@ -57,7 +58,8 @@ public class ToolbarView {
                 buttons.get("run"),
                 buttons.get("clean"),
                 buttons.get("load"),
-                buttons.get("save"));
+                buttons.get("save"),
+                buttons.get("result"));
         leftSection.setAlignment(Pos.CENTER_LEFT);
 
         HBox centerSection = new HBox(10,

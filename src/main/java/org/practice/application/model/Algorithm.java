@@ -38,10 +38,10 @@ public class Algorithm {
             @Override
             protected Void call() throws Exception {
 
-                firstDFS();
+                firstDFS(true);
                 System.out.println(graph.toString());
 
-                secondDFS();
+                secondDFS(true);
 
                 for (Vertex ver1 : vertex) {
                     for (Vertex ver2 : graph.get(ver1)) {
@@ -50,7 +50,7 @@ public class Algorithm {
                             result.add(new Vertex[]{ver1, ver2});
 
                             Platform.runLater(() -> {
-                                view.drawBridges(ver2.getId(), ver1.getId());
+                                view.drawBridges(ver1.getId(), ver2.getId());
                             });
 
                         }
@@ -73,7 +73,7 @@ public class Algorithm {
         return this.result;
     }
 
-    private void firstDFS(){
+    private void firstDFS(boolean isStep){
         Stack<Vertex> stack = new Stack<Vertex>();
         Vertex nextVertex = this.findUnviewedVertexFisrtDFS();
         OUTER_LOOP:
@@ -88,19 +88,21 @@ public class Algorithm {
                         graph.get(nextVertex).remove(i);
 
                         Vertex finalNextVertex = nextVertex;
-                        Platform.runLater(() -> {
-                            view.drawDirection(finalNextVertex.getId(), neighbour.getId());
-                        });
+
+                        if (isStep) {
+                            Platform.runLater(() -> {
+                                view.drawDirection(finalNextVertex.getId(), neighbour.getId());
+                            });
 
 
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                            return;
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                                return;
+                            }
+
                         }
-
-
 
                         nextVertex = neighbour;
                         continue OUTER_LOOP;
@@ -115,7 +117,7 @@ public class Algorithm {
         }
     }
 
-    private void secondDFS(){
+    private void secondDFS(boolean isStep){
         int color = 1;
         Stack<Vertex> stack = new Stack<Vertex>();
         Vertex nextVertex = this.findUnviewedVertexSecondDFS();
@@ -128,18 +130,19 @@ public class Algorithm {
 
             Vertex finalNextVertex = nextVertex;
             int finalColor = color;
-            Platform.runLater(() -> {
-                view.drawVertex(finalNextVertex.getId(), finalColor);
-            });
+            if (isStep) {
+                Platform.runLater(() -> {
+                    view.drawVertex(finalNextVertex.getId(), finalColor);
+                });
 
-            // Пауза для визуализации
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                return;
+                // Пауза для визуализации
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
             }
-
 
 
             while (!stack.empty()) {
@@ -186,5 +189,34 @@ public class Algorithm {
 
     public void stop(){
         taskOfAlg.interrupt();
+    }
+
+    public void getResultFast() {
+
+
+        firstDFS(false);
+        secondDFS(false);
+
+        for (Vertex ver1 : vertex) {
+            for (Vertex ver2 : graph.get(ver1)) {
+                if (ver1.getColor() != ver2.getColor()) {
+                    result.add(new Vertex[]{ver1, ver2});
+
+                    view.drawBridges(ver2.getId(), ver1.getId());
+
+                }
+            }
+        }
+        System.out.println("Result:");
+        for (Vertex[] pair: result){
+            System.out.println(pair[0] + "--" + pair[1]);
+        }
+
+
+
+        for (Vertex ver: vertex)
+            ver.clearVertex();
+
+
     }
 }
