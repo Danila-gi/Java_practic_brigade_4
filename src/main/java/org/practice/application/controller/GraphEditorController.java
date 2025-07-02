@@ -89,7 +89,7 @@ public class GraphEditorController {
         toolbarView.getButton("deleteEdge").setDisable(!isEditMode);
         toolbarView.getFirstVertexField().setDisable(!isEditMode);
         toolbarView.getSecondVertexField().setDisable(!isEditMode);
-
+        toolbarView.getButton("cursor").setDisable(!isEditMode);
         if (!isEditMode && firstSelectedVertexId != null) {
             graphView.highlight(firstSelectedVertexId, Color.LIGHTBLUE);
             firstSelectedVertexId = null;
