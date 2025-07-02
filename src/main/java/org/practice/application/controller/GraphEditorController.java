@@ -275,8 +275,10 @@ public class GraphEditorController {
             clearSelection();
             return;
         }
-        graphView.addEdge(firstSelectedVertexId, vertexId, strokeWidth, colorEdge);
-        graph.addEdge(firstSelectedVertexId, vertexId);
+        if (!isDragMode) {
+            graphView.addEdge(firstSelectedVertexId, vertexId, strokeWidth, colorEdge);
+            graph.addEdge(firstSelectedVertexId, vertexId);
+        }
         clearSelection();
     }
 
