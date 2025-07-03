@@ -1,12 +1,16 @@
 package org.practice.application.controller;
 
 import javafx.scene.Node;
+import javafx.scene.control.ButtonBase;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import org.practice.application.controller.states.*;
 import org.practice.application.model.*;
 import org.practice.application.view.GraphView;
 import org.practice.application.view.ToolbarView;
+
+import java.util.Map;
 
 public class GraphEditorController {
     private final GraphEditorContext context;
@@ -56,7 +60,7 @@ public class GraphEditorController {
         this.runState = new RunState(stateData);
         this.getResultState = new GetResultState(stateData);
 
-        context.transitToState(addState);
+        context.transitToState(dragState);
         setUpToolbarActions();
         setUpMouseHandlers();
     }
@@ -75,14 +79,25 @@ public class GraphEditorController {
         toolbarView.getButton("result").setOnAction(event -> resultEditMode());
     }
 
+    private void resetControlsEnabled() {
+        for (ButtonBase button: toolbarView.getButtons().values()) {
+            button.setDisable(false);
+            if (button instanceof ToggleButton) {
+                ((ToggleButton) button).setSelected(false);
+            }
+        }
+        toolbarView.getFirstVertexField().setDisable(false);
+        toolbarView.getSecondVertexField().setDisable(false);
+    }
+
     private void toggleEditMode() {
         boolean isInRunMode = context.getState() instanceof RunState;
         if (isInRunMode) {
             context.transitToState(dragState);
-            setEditModeControlsEnabled(new String[] {"addVertex","deleteVertex","addEdge", "deleteEdge", "result"},true);
+            resetControlsEnabled();
         } else {
             context.transitToState(runState);
-            setEditModeControlsEnabled(new String[] {"addVertex","deleteVertex","addEdge", "deleteEdge", "result"},false);
+            setEditModeControlsEnabled("run",false);
         }
     }
 
@@ -90,17 +105,18 @@ public class GraphEditorController {
         boolean isGetResult = context.getState() instanceof GetResultState;
         if (isGetResult) {
             context.transitToState(dragState);
-            setEditModeControlsEnabled(new String[] {"addVertex","deleteVertex","addEdge", "deleteEdge", "run"},true);
+            resetControlsEnabled();
         } else {
             context.transitToState(getResultState);
-            setEditModeControlsEnabled(new String[] {"addVertex","deleteVertex","addEdge", "deleteEdge", "run"},false);
+            setEditModeControlsEnabled("result",false);
         }
     }
 
-
-    private void setEditModeControlsEnabled(String[] arrForDisable, boolean enabled) {
-        for (String str : arrForDisable) {
-            toolbarView.getButton(str).setDisable(!enabled);
+    private void setEditModeControlsEnabled(String activeButtonKey, boolean enabled) {
+        for (Map.Entry<String, ButtonBase> entry : toolbarView.getButtons().entrySet()) {
+            String key = entry.getKey();
+            ButtonBase button = entry.getValue();
+            button.setDisable(!key.equals(activeButtonKey));
         }
         toolbarView.getFirstVertexField().setDisable(!enabled);
         toolbarView.getSecondVertexField().setDisable(!enabled);

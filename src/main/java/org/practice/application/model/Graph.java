@@ -154,11 +154,13 @@ public class Graph {
         try (FileWriter writer = new FileWriter(filename, true)) {
             getRusult();
             ArrayList<Vertex[]> bridges = alg.getListBridges();
-            writer.write("Result:");
+            writer.write("Result:\n");
             for (Vertex[] bridge : bridges) {
                 writer.write(bridge[0] + " -- " + bridge[1] + "\n");
             }
-            alg.clear();
+            if (bridges.isEmpty()) {
+                writer.write("No bridges");
+            }
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }

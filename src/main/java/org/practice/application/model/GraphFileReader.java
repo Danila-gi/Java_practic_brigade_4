@@ -21,24 +21,31 @@ public class GraphFileReader {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             int i = 0;
-
+            boolean readingMatrix = true;
             while ((line = br.readLine()) != null) {
-                String[] neighbours = line.split(" ");
-                if (count_of_vertex == -1) {
-                    count_of_vertex = neighbours.length;
-                    for (int j = 0; j < count_of_vertex; j++)
-                        vertex.add(new Vertex(j + 1));
+                if (line.trim().equals("Result:")) {
+                    readingMatrix = false;
+                    continue;
                 }
-                else{
-                    if (count_of_vertex != neighbours.length)
-                        throw new FileException("Incorrect matrix!");
+
+                if (readingMatrix) {
+                    String[] neighbours = line.split(" ");
+                    if (count_of_vertex == -1) {
+                        count_of_vertex = neighbours.length;
+                        for (int j = 0; j < count_of_vertex; j++)
+                            vertex.add(new Vertex(j + 1));
+                    }
+                    else{
+                        if (count_of_vertex != neighbours.length)
+                            throw new FileException("Incorrect matrix!");
+                    }
+                    graph.put(vertex.get(i), new ArrayList<Vertex>());
+                    for (int j = 0; j < neighbours.length; j++){
+                        if (neighbours[j].equals("1"))
+                            graph.get(vertex.get(i)).add(vertex.get(j));
+                    }
+                    i++;
                 }
-                graph.put(vertex.get(i), new ArrayList<Vertex>());
-                for (int j = 0; j < neighbours.length; j++){
-                    if (neighbours[j].equals("1"))
-                        graph.get(vertex.get(i)).add(vertex.get(j));
-                }
-                i++;
             }
 
             if (count_of_vertex != i)

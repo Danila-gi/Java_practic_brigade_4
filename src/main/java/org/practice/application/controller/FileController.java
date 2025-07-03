@@ -58,10 +58,10 @@ public class FileController {
 
     public void saveResult(String filename) throws FileException {
         graph.saveResult(filename);
+        graph.clearAlg();
         for (Vertex ver : graph.getArrayOfVertex()) {
             ver.clearVertex();
         }
-
 
         for (Node node : graphView.getGraphPane().getChildren()) {
             if ("Line".equals(node.getTypeSelector())) {

@@ -209,8 +209,6 @@ public class Algorithm {
             System.out.println(pair[0] + "--" + pair[1]);
         }
 
-
-
         for (Vertex ver: vertex)
             ver.clearVertex();
     }
