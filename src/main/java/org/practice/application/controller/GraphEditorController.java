@@ -52,9 +52,9 @@ public class GraphEditorController {
         this.saveState = new SaveState(fileController);
         this.loadState = new LoadState(fileController);
         this.cleanState = new CleanState(stateData);
-        this.helpState = new HelpState(context, stateData);
-        this.runState = new RunState(context, stateData);
-        this.getResultState = new GetResultState(context, stateData);
+        this.helpState = new HelpState(stateData);
+        this.runState = new RunState(stateData);
+        this.getResultState = new GetResultState(stateData);
 
         context.transitToState(addState);
         setUpToolbarActions();

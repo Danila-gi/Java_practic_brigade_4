@@ -13,11 +13,9 @@ import java.util.ArrayList;
 
 public class GetResultState implements EditorState {
     private final GraphView graphView;
-    private final GraphEditorContext context;
     private final Graph graph;
 
-    public GetResultState(GraphEditorContext context, EditorStateData stateData) {
-        this.context = context;
+    public GetResultState(EditorStateData stateData) {
         this.graph = stateData.getGraph();
         this.graphView = stateData.getGraphView();
 

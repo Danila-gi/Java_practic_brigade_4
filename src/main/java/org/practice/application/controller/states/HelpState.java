@@ -7,10 +7,8 @@ import org.practice.application.view.GraphView;
 
 public class HelpState implements EditorState {
     private final GraphView graphView;
-    private final GraphEditorContext context;
 
-    public HelpState(GraphEditorContext context, EditorStateData stateData) {
-        this.context = context;
+    public HelpState(EditorStateData stateData) {
         this.graphView = stateData.getGraphView();
     }
 

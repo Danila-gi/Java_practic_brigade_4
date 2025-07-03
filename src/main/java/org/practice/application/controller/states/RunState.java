@@ -11,12 +11,10 @@ import org.practice.application.view.GraphView;
 import java.util.ArrayList;
 
 public class RunState implements EditorState {
-    private final GraphEditorContext context;
     private final Graph graph;
     private final GraphView graphView;
 
-    public RunState(GraphEditorContext context, EditorStateData stateData) {
-        this.context = context;
+    public RunState(EditorStateData stateData) {
         this.graph = stateData.getGraph();
         this.graphView = stateData.getGraphView();
     }
