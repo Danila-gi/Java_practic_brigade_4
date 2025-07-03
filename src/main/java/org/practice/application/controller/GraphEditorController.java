@@ -49,10 +49,10 @@ public class GraphEditorController {
         this.addState = new AddState(vertexController, edgeController, stateData);
         this.deleteState = new DeleteState(vertexController);
         this.dragState = new DragState(vertexController);
-        this.saveState = new SaveState(context, fileController, dragState);
-        this.loadState = new LoadState(context, fileController, dragState);
-        this.cleanState = new CleanState(context, stateData, dragState);
-        this.helpState = new HelpState(context, stateData, dragState);
+        this.saveState = new SaveState(fileController);
+        this.loadState = new LoadState(fileController);
+        this.cleanState = new CleanState(stateData);
+        this.helpState = new HelpState(context, stateData);
         this.runState = new RunState(context, stateData);
         this.getResultState = new GetResultState(context, stateData);
 

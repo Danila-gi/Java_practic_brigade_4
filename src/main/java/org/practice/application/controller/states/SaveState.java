@@ -9,12 +9,8 @@ import java.io.File;
 
 public class SaveState implements EditorState {
     private final FileController fileController;
-    private final GraphEditorContext context;
-    private final EditorState newState;
 
-    public SaveState(GraphEditorContext context, FileController fileController, EditorState newState) {
-        this.context = context;
-        this.newState = newState;
+    public SaveState(FileController fileController) {
         this.fileController = fileController;
     }
 
@@ -29,7 +25,6 @@ public class SaveState implements EditorState {
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
             fileController.saveResult(file.getAbsolutePath());
-            context.transitToState(newState);
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Save cancel");

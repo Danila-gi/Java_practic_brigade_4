@@ -8,12 +8,10 @@ import org.practice.application.view.GraphView;
 public class HelpState implements EditorState {
     private final GraphView graphView;
     private final GraphEditorContext context;
-    private final EditorState newState;
 
-    public HelpState(GraphEditorContext context, EditorStateData stateData, EditorState newState) {
+    public HelpState(GraphEditorContext context, EditorStateData stateData) {
         this.context = context;
         this.graphView = stateData.getGraphView();
-        this.newState = newState;
     }
 
     @Override
@@ -27,6 +25,5 @@ public class HelpState implements EditorState {
                 "\nIn down side select two vertices between which the edge needs to be removed." +
                 "\nClick on RUN to see work of algorithm.");
         alert.showAndWait();
-        context.transitToState(newState);
     }
 }

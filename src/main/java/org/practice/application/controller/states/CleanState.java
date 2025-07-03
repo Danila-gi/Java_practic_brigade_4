@@ -6,14 +6,10 @@ import org.practice.application.model.GraphEditorContext;
 import org.practice.application.view.GraphView;
 
 public class CleanState implements EditorState {
-    private GraphEditorContext context;
-    private EditorState newState;
     private final Graph graph;
     private final GraphView graphView;
 
-    public CleanState(GraphEditorContext context, EditorStateData stateData, EditorState newState) {
-        this.context = context;
-        this.newState = newState;
+    public CleanState(EditorStateData stateData) {
         this.graph = stateData.getGraph();
         this.graphView = stateData.getGraphView();
     }
@@ -22,6 +18,5 @@ public class CleanState implements EditorState {
     public void openState() {
         graph.clear();
         graphView.cleanSurface();
-        context.transitToState(newState);
     }
 }
